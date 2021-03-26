@@ -1,0 +1,20 @@
+---
+title: "Trabajo1"
+author: "Juan Jose Hurtado Alvarez"
+date: "26/3/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+datos <- read.csv("encuesta1.csv")
+```
+
+```{r}
+head(datos)
+```
+
