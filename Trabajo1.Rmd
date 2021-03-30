@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 datos <- read.csv("encuesta1.csv")
+###parte del ensayo
 ```
 
 ```{r}
