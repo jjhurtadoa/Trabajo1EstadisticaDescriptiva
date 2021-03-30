@@ -23,3 +23,8 @@ head(datos)
 ```{r}
 library(tidyverse)
 ```
+
+
+```{r}
+str(Enc)
+```
