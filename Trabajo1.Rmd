@@ -18,3 +18,7 @@ datos <- read.csv("encuesta1.csv")
 head(datos)
 ```
 
+
+```{r}
+library(tidyverse)
+```
