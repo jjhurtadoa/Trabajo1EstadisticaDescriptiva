@@ -1,22 +1,25 @@
 ---
-title: "Trabajo1"
+title: "Primer_taller_grupal_sobre_encuesta_en_clase"
 author: "Juan Jose Hurtado Alvarez"
-date: "26/3/2021"
+date: "Miercoles 7 de Abril de 2021"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE
+                      )
 ```
 
 
 ```{r}
-datos <- read.csv("encuesta1.csv")
+Enc <- read.csv("encuesta1.csv")
 ###parte del ensayo
 ```
 
 ```{r}
-head(datos)
+head(Enc)
 ```
 
 
@@ -28,3 +31,221 @@ library(tidyverse)
 ```{r}
 str(Enc)
 ```
+
+
+
+```{r}
+glimpse(Enc)
+```
+
+```{r}
+summary(Enc)
+```
+
+```{r}
+enc <- Enc %>%
+  mutate_if(is.character, as.factor)
+```
+
+```{r}
+summary(enc)
+```
+```{r}
+glimpse(enc)
+```
+
+```{r}
+enc <- enc %>%
+  mutate(Q02_FechaNac = as.Date(as.character(Q02_FechaNac), '%Y-%m-%d'))
+```
+
+```{r}
+summary(enc$Q02_FechaNac)
+```
+
+```{r}
+enc <- enc %>%
+  mutate(Edad= as.numeric(as.Date("2021-06-30") - Q02_FechaNac)/365.25)
+```
+
+```{r}
+enc <- enc %>%
+  mutate(fecha_entrega =
+           as.POSIXct(strptime(Enviado.el.,format = "%d,/%m/%Y %H:%M:%S")),
+         tiempo_usado = as.integer(format(fecha_entrega, "%M")) +
+                        as.integer(format(fecha_entrega, "&S")) / 60 - 30)
+```
+
+
+
+```{r}
+enc %>%
+  filter(Q08_PAPA > 5)
+```
+```{r}
+enc$Q08_PAPA[enc$Q08_PAPA == 45 & !is.na(enc$Q08_PAPA)] <- 4.5
+```
+
+
+```{r}
+enc <- enc %>% 
+  mutate(puntaje_pregunta2 = 
+  apply(enc %>% select(Q26_Divisor..f.es.divisor.de.g.2.,
+                            Q26_Divisor..f.es.divisor.de.gh.,
+                            Q26_Divisor..f.es.divisor.de.h.g),
+        1, sum))
+t_p2 <- table(enc$puntaje_pregunta2)
+t_p2
+pt_p2 <- t_p2 / sum(t_p2) * 100
+pt_p2
+```
+
+```{r}
+dotchart(enc$Q08_PAPA)
+```
+
+```{r}
+t_gen <- table(enc$Q01_Genero)
+t_gen
+```
+
+```{r}
+gen_p <- t_gen / sum(t_gen) * 100
+gen_p
+```
+```{r}
+bp1 <- barplot(gen_p, las = 1, ylim = c(0, 100), col = "lightgreen")
+text(bp1, gen_p + 7, paste(round(gen_p, 1), "%"))
+```
+
+```{r}
+m_gen <- as.matrix(gen_p)
+bp2 <- barplot(m_gen, beside = FALSE, xlim = c(0, 5),
+               ylim = c(0, 120),
+               col = c("violet", "lightgreen", "grey10"))
+text(1.3, cumsum(m_gen) - m_gen/2, 
+     paste(rownames(m_gen), round((m_gen), 1), "%"),
+     adj = 0)
+```
+
+```{r}
+pie(gen_p, labels = paste(names(gen_p), round(gen_p, 1), "%"),
+    col = c("violet", "grey10", "lightgreen"))
+```
+```{r}
+summary(enc$Edad)
+```
+
+```{r}
+hist(enc$Edad)
+```
+
+```{r}
+hist(enc$Edad, nclass = 20)
+```
+
+```{r}
+paramAnt <- par(no.readonly = TRUE)
+hist(enc$Edad, freq = FALSE, nclass = 20, col = "violet",
+     las = 1, 
+     main = "Distribución de la edad",
+     xlab = "Edad (años)",
+     ylab = "Densidad",
+     ylim = c(0, 0.20),
+     xlim = c(15, 40))
+lines(density(enc$Edad), col = "grey10", lwd = 5)
+par(paramAnt)
+```
+
+```{r}
+boxplot(Enc$Q08_PAPA, horizontal = TRUE)
+```
+```{r}
+bxp1<-boxplot(Enc$Q08_PAPA, horizontal = TRUE,  notch= TRUE, col= 'violet')
+title(main= 'Distribución_PAPA', font=2, xlab='Promedio Academico Ponderado Acumulado')
+points(mean(enc$Q08_PAPA, na.rm=TRUE),1, col=' green', pch=19, cex=2)# agranda o disminuye el punto verde
+legend(4.2,1.5, legend=c('Promedio'), pch=19, col= 'green')
+```
+
+
+```{r}
+promedioEdad <- mean(enc$Edad)
+medianaEdad <- median(enc$Edad)
+desv_Est_Edad <- sd(enc$Edad)
+
+boxplot(enc$Edad, horizontal = TRUE,
+        main = "Boxplot para edad", 
+        col = "lightblue",
+        pch = 19, notch = TRUE)
+points(promedioEdad, 
+       1, 
+       pch = 19, 
+       col = c("red", "purple"))
+legend("topright", 
+       title = "Convención",
+       legend = c("Promedio", "Error estandard"), 
+       col = "red", 
+       pch = c(19, NA),
+       lty = c(NA, 1))
+arrows(promedioEdad -  desv_Est_Edad / sqrt(nrow(enc)), 1,
+         promedioEdad + desv_Est_Edad / sqrt(nrow(enc)), 1,
+         angle = 90,
+         length = 0.1, 
+         code = 3,
+         col = "GREY10")
+```
+
+```{r}
+table(enc$Q10_Estrato)
+```
+```{r}
+barplot(table(enc$Q10_Estrato))
+```
+
+
+
+```{r}
+with(enc, plot(Q10_Estrato, Q08_PAPA, notch = TRUE))
+```
+
+
+```{r}
+enc_Estrato1 <- enc %>% 
+  filter(Q10_Estrato == "2 : 1")
+dotchart(enc_Estrato1$Q08_PAPA)
+summary(enc_Estrato1$Q08_PAPA)
+```
+
+
+```{r}
+with(enc, plot(Q03_Carrera, Q08_PAPA, notch = TRUE))
+```
+
+
+```{r}
+with(enc, scatter.smooth(tiempo_usado, Q08_PAPA))
+```
+
+
+```{r}
+with(enc, plot(Q27_PorcentDivisor))
+lines(1:nrow(enc), rep(pt_p2[3], nrow(enc)), 
+      col = "red")
+```
+
+```{r}
+enc_acert_p2 <- enc %>% 
+  filter(puntaje_pregunta2 == 3)
+enc_no_acert_p2 <- enc %>% 
+  filter(puntaje_pregunta2 != 3)
+op <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2))
+prom_Q27 <- mean(enc_acert_p2$Q27)
+with(enc_acert_p2, plot(Q27_PorcentDivisor, ylim = c(0, 100)))
+lines(1:nrow(enc_acert_p2), rep(prom_Q27, nrow(enc_acert_p2)), 
+      col = "red")
+prom_Q27_na <- mean(enc_no_acert_p2$Q27, na.rm = TRUE, ylim = c(0, 100))
+with(enc_no_acert_p2, plot(Q27_PorcentDivisor))
+lines(1:nrow(enc_no_acert_p2), rep(prom_Q27_na, nrow(enc_no_acert_p2)), 
+      col = "red")
+par(op)
