@@ -12,20 +12,23 @@ knitr::opts_chunk$set(echo = FALSE,
                       )
 ```
 
-
+#### Se realiza la lectura de la base de datos de la que vamos a tomar información para realizar un analisis gráfico/exploratorio de lo que podamos encontrar en ella; se codifica con *UTF-08* para una lectura adecuada que permita tildes y letras en español.
 ```{r}
-Enc <- read.csv("encuesta1.csv")
-###parte del ensayo
+Enc <- read.csv("encuesta1.csv", encoding = "UTF-8")
+
 ```
 
+
+#### Se muestran en el archivo los primeros 6 registros de la base de datos en cuestión, para dar una idea lo que pueda contener  ésta misma.
 ```{r}
 head(Enc)
 ```
 
-
+#### Valiendonos de las múltiples opciones que tenemos para presentar este proyecto, hacemos uso de esta biblioteca en particular
 ```{r}
 library(tidyverse)
 ```
+
 
 
 ```{r}
@@ -50,6 +53,7 @@ enc <- Enc %>%
 ```{r}
 summary(enc)
 ```
+
 ```{r}
 glimpse(enc)
 ```
@@ -82,6 +86,7 @@ enc <- enc %>%
 enc %>%
   filter(Q08_PAPA > 5)
 ```
+
 ```{r}
 enc$Q08_PAPA[enc$Q08_PAPA == 45 & !is.na(enc$Q08_PAPA)] <- 4.5
 ```
@@ -103,16 +108,19 @@ pt_p2
 ```{r}
 dotchart(enc$Q08_PAPA)
 ```
+### La variable *Genero*, no requerirá hacer una depuración de los datos puesto que consideramos que encuentra en orden dentro de la tabla original así que se procederá entonces a representar dichos datos en su gráfica, para ello crearemos una tabla de frecuencias y su correspondiente valor porcentual.
 
-```{r}
-t_gen <- table(enc$Q01_Genero)
-t_gen
+
+```{r depuración de la variable ** Género**}
+gen <- table(enc$Q01_Genero)
+gen
 ```
 
 ```{r}
-gen_p <- t_gen / sum(t_gen) * 100
+gen_p <- gen / sum(t_gen) * 100
 gen_p
 ```
+
 ```{r}
 bp1 <- barplot(gen_p, las = 1, ylim = c(0, 100), col = "lightgreen")
 text(bp1, gen_p + 7, paste(round(gen_p, 1), "%"))
@@ -207,7 +215,7 @@ barplot(table(enc$Q10_Estrato))
 ```{r}
 with(enc, plot(Q10_Estrato, Q08_PAPA, notch = TRUE))
 ```
-
+R
 
 ```{r}
 enc_Estrato1 <- enc %>% 
@@ -249,3 +257,13 @@ with(enc_no_acert_p2, plot(Q27_PorcentDivisor))
 lines(1:nrow(enc_no_acert_p2), rep(prom_Q27_na, nrow(enc_no_acert_p2)), 
       col = "red")
 par(op)
+```
+
+
+
+```
+
+
+
+
+
