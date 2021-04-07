@@ -5,7 +5,7 @@ authors:"Omar David Mercado",
         "Juan Jose Hurtado Alvarez",
         "ESteban Grajales",
         "Juan Manuel"
-email:  "omercado@unal.edu.co",
+email:  "omercado@unal.edu.co", 
         "zcarriazo@unal.edu.co",
         "jgrajalesh@unal.edu.co" 
 date: "Miercoles 7 de Abril de 2021"
