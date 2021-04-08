@@ -6,7 +6,7 @@ authors:"Omar David Mercado",
         "ESteban Grajales",
         "Juan Manuel"
 email:  "omercado@unal.edu.co", 
-        "zcarriazo@unal.edu.co",
+        "zcarriazo@unal.edu.co",Re
         "jgrajalesh@unal.edu.co" 
 date: "Miercoles 7 de Abril de 2021"
 output: html_document
@@ -37,7 +37,7 @@ Enc <- read.csv("encuesta1.csv", encoding = "UTF-8")
 head(Enc)
 ```
 
-###### Se hace una revisión de las variables contenidas en la base de datos para mirar de que tipo son, y posteriormente convertirlas a otro tipo para trabajarlas a nuestra conveniencia
+###### Se hace una revisión de las variables contenidas en la base de datos para mirar a que tipo pertenecen, y posteriormente convertirlas a otro para trabajarlas a nuestra conveniencia
 ```{r}
 glimpse(Enc)
 ```
@@ -47,13 +47,10 @@ summary(Enc)
 ```
 
 
-##### Se convierte el asignado de la primera variable **Respuesta** a tipo character pues se considera que con estas cifras no debemos hacer ningún tipo de cálculo matemático como para dejarla ser *entero* 
-```{r}
-enc <- Enc %>%
- mutate_if(is.integer, as.character)
-```
+##### Como primer depurado; se convierte el asignado de la primera variable **Respuesta** a tipo character en consola, pues se considera que con estas cifras no debemos hacer ningún tipo de cálculo matemático como para dejarla ser *entero* ; tambien se convierte a tipo factor las variables en lenguaje binario, representando como *Si* al número *1*
 
-##### Se cambian las variables de tipo caracter a factor para un adecuado manejo de
+
+##### Se cambian las variables de tipo caracter a factor para un adecuado manejo de los resultados encontrados en estas variables
 éstas en su análisis descriptivo
 ```{r}
 enc <- enc %>%
