@@ -7,6 +7,7 @@ authors:"Omar David Mercado",
         "Juan Manuel"
 email:  "omercado@unal.edu.co",
         "zcarriazo@unal.edu.co",
+    
         "jgrajalesh@unal.edu.co" 
 date: "Miercoles 7 de Abril de 2021"
 output: html_document
@@ -19,31 +20,25 @@ knitr::opts_chunk$set(echo = FALSE,
                       )
 ```
 
-#### Se realiza la lectura de la base de datos de la que vamos a tomar información para realizar un analisis gráfico/exploratorio de lo que podamos encontrar en ella; se codifica con *UTF-08* para una lectura adecuada que permita tildes y letras en español.
+
+##### Valiendonos de las múltiples opciones que tenemos para presentar este proyecto, hacemos uso de esta biblioteca en particular
+```{r}
+library(tidyverse)
+```
+
+##### Se realiza la lectura de la base de datos de la que vamos a tomar información para realizar un analisis gráfico/exploratorio de lo que podamos encontrar en ella; se codifica con *UTF-08* para una lectura adecuada que permita tildes y letras en español.
 ```{r}
 Enc <- read.csv("encuesta1.csv", encoding = "UTF-8")
 
 ```
 
 
-#### Se muestran en el archivo los primeros 6 registros de la base de datos en cuestión, para dar una idea lo que pueda contener  ésta misma.
+##### Se muestran en el archivo los primeros 6 registros de la base de datos en cuestión, para dar una idea lo que pueda contener  ésta misma.
 ```{r}
 head(Enc)
 ```
 
-#### Valiendonos de las múltiples opciones que tenemos para presentar este proyecto, hacemos uso de esta biblioteca en particular
-```{r}
-library(tidyverse)
-```
-
-
-
-```{r}
-str(Enc)
-```
-
-
-
+###### Se hace una revisión de las variables contenidas en la base de datos para mirar de que tipo son, y posteriormente convertirlas a otro tipo para trabajarlas a nuestra conveniencia
 ```{r}
 glimpse(Enc)
 ```
@@ -52,8 +47,17 @@ glimpse(Enc)
 summary(Enc)
 ```
 
+
+##### Se convierte el asignado de la primera variable **Respuesta** a tipo character pues se considera que con estas cifras no debemos hacer ningún tipo de cálculo matemático como para dejarla ser *entero* 
 ```{r}
 enc <- Enc %>%
+ mutate_if(is.integer, as.character)
+```
+
+##### Se cambian las variables de tipo caracter a factor para un adecuado manejo de
+éstas en su análisis descriptivo
+```{r}
+enc <- enc %>%
   mutate_if(is.character, as.factor)
 ```
 
@@ -64,6 +68,8 @@ summary(enc)
 ```{r}
 glimpse(enc)
 ```
+
+
 
 ```{r}
 enc <- enc %>%
@@ -88,17 +94,6 @@ enc <- enc %>%
 ```
 
 
-
-```{r}
-enc %>%
-  filter(Q08_PAPA > 5)
-```
-
-```{r}
-enc$Q08_PAPA[enc$Q08_PAPA == 45 & !is.na(enc$Q08_PAPA)] <- 4.5
-```
-
-
 ```{r}
 enc <- enc %>% 
   mutate(puntaje_pregunta2 = 
@@ -112,10 +107,8 @@ pt_p2 <- t_p2 / sum(t_p2) * 100
 pt_p2
 ```
 
-```{r}
-dotchart(enc$Q08_PAPA)
-```
-### La variable *Genero*, no requerirá hacer una depuración de los datos puesto que consideramos que encuentra en orden dentro de la tabla original así que se procederá entonces a representar dichos datos en su gráfica, para ello crearemos una tabla de frecuencias y su correspondiente valor porcentual.
+
+### La variable *Genero*, no requerirá hacer una depuración de los datos puesto que consideramos que se encuentra en orden dentro de la tabla original así que se procederá a representar dichos datos en su gráfica, para ello crearemos una tabla de frecuencias y su correspondiente valor porcentual.
 
 
 ```{r depuración de la variable ** Género**}
@@ -124,29 +117,27 @@ gen
 ```
 
 ```{r}
-gen_p <- gen / sum(t_gen) * 100
+gen_p <- gen / sum(gen) * 100
 gen_p
 ```
 
+
 ```{r}
-bp1 <- barplot(gen_p, las = 1, ylim = c(0, 100), col = "lightgreen")
+paramAnt <- par(no.readonly = TRUE)
+barplot(gen_p, las = 1,
+        main  = "Distribución por género",
+        ylim = c(0,100),
+        col =c ('Black', 'violet', 'cyan'), 
+        legend.text = c('Masculino', 'Femenino', 'Otro'))
 text(bp1, gen_p + 7, paste(round(gen_p, 1), "%"))
+grid(NA, 9)
+par(paramAnt)
 ```
 
-```{r}
-m_gen <- as.matrix(gen_p)
-bp2 <- barplot(m_gen, beside = FALSE, xlim = c(0, 5),
-               ylim = c(0, 120),
-               col = c("violet", "lightgreen", "grey10"))
-text(1.3, cumsum(m_gen) - m_gen/2, 
-     paste(rownames(m_gen), round((m_gen), 1), "%"),
-     adj = 0)
-```
+##### En la gráfica que representa la distribución por género se evidencia que la mayoría de los estudiantes que cursan esta asignatura son hombres, esto se debería a lo mejor a que la carrera es nueva y está mas enfocada en asuntos relacionados con la programación que desde tiempos anteriores se ha venido gestionando pr el género masculino
 
-```{r}
-pie(gen_p, labels = paste(names(gen_p), round(gen_p, 1), "%"),
-    col = c("violet", "grey10", "lightgreen"))
-```
+
+
 ```{r}
 summary(enc$Edad)
 ```
@@ -172,6 +163,38 @@ lines(density(enc$Edad), col = "grey10", lwd = 5)
 par(paramAnt)
 ```
 
+
+
+
+#### Se filtra la fila en donde la variable **Q08_PAPA** presenta un error atípico y para tomar la decisión de corregir el dato, pues consideramos que pudo deberse a un error en la digitación de éste
+```{r depuracion de la variable Q08_PAPA y analisis descriptivo}
+enc %>%
+  filter(Q08_PAPA > 5)
+```
+
+```{r}
+enc$Q08_PAPA[enc$Q08_PAPA == 45 & !is.na(enc$Q08_PAPA)] <- 4.5
+```
+
+
+```{r}
+summary(enc$Q08_PAPA)
+```
+###  Se toma la decisión de omitir los datos en *NA* ya que no hacen una gran representacion.
+```{r}
+enc$Q08_PAPA # FALTA
+```
+
+```{r}
+hist(enc$Q08_PAPA)
+```
+
+
+
+
+
+
+
 ```{r}
 boxplot(Enc$Q08_PAPA, horizontal = TRUE)
 ```
@@ -182,6 +205,9 @@ points(mean(enc$Q08_PAPA, na.rm=TRUE),1, col=' green', pch=19, cex=2)# agranda o
 legend(4.2,1.5, legend=c('Promedio'), pch=19, col= 'green')
 ```
 
+```{r}
+dotchart(enc$Q08_PAPA)
+```
 
 ```{r}
 promedioEdad <- mean(enc$Edad)
@@ -213,6 +239,7 @@ arrows(promedioEdad -  desv_Est_Edad / sqrt(nrow(enc)), 1,
 ```{r}
 table(enc$Q10_Estrato)
 ```
+
 ```{r}
 barplot(table(enc$Q10_Estrato))
 ```
@@ -267,8 +294,6 @@ par(op)
 ```
 
 
-
-```
 
 
 
