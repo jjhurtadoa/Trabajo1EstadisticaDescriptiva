@@ -6,7 +6,7 @@ authors:"Omar David Mercado",
         "ESteban Grajales",
         "Juan Manuel"
 email:  "omercado@unal.edu.co", 
-        "zcarriazo@unal.edu.co",Re
+        "zcarriazo@unal.edu.co",
         "jgrajalesh@unal.edu.co" 
 date: "Miercoles 7 de Abril de 2021"
 output: html_document
@@ -46,16 +46,55 @@ glimpse(Enc)
 summary(Enc)
 ```
 
-
-##### Como primer depurado; se convierte el asignado de la primera variable **Respuesta** a tipo character en consola, pues se considera que con estas cifras no debemos hacer ningún tipo de cálculo matemático como para dejarla ser *entero* ; tambien se convierte a tipo factor las variables en lenguaje binario, representando como *Si* al número *1*
-
-
 ##### Se cambian las variables de tipo caracter a factor para un adecuado manejo de los resultados encontrados en estas variables
 éstas en su análisis descriptivo
 ```{r}
-enc <- enc %>%
+enc <- Enc %>%
   mutate_if(is.character, as.factor)
 ```
+
+##### Como primer depurado; se convierte el asignado de la primera variable **Respuesta** a tipo character, pues se considera que con estas cifras no debemos hacer ningún tipo de cálculo matemático como para dejarla ser *entero*
+
+```{r}
+enc$Respuesta<-factor(enc$Respuesta)
+```
+
+#####tambien se convierte a tipo factor las variables en lenguaje binario, representando como *Si* al número *1*, para una mayor claridad al público,en la lectura de la base de datos 
+```{r}
+enc$Q09_EnAreaMetropolitana<-factor(enc$Q09_EnAreaMetropolitana, levels=c(0:1), labels=c('No','Si'))
+enc$Q11_R<-factor(enc$Q11_R, levels=c(0:1), labels=c('No','Si'))
+enc$Q12_RStudio<-factor(enc$Q12_RStudio,levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Internet.de.cable.no.propio<-factor(enc$Q14_RecursosInformaticos..Internet.de.cable.no.propio, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Wifi.propio<-factor(enc$Q14_RecursosInformaticos..Wifi.propio, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Wifi.no.propio<-factor(enc$Q14_RecursosInformaticos..Wifi.no.propio,levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Celular.sin.datos<-factor(enc$Q14_RecursosInformaticos..Celular.sin.datos, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Celular.con.datos<-factor(enc$Q14_RecursosInformaticos..Celular.con.datos, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Portátil.propio<-factor(enc$Q14_RecursosInformaticos..Portátil.propio, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Portátil.no.propio<-factor(enc$Q14_RecursosInformaticos..Portátil.no.propio, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Computador.de.escritorio.propio.y.exclusivo<-factor(enc$Q14_RecursosInformaticos..Computador.de.escritorio.propio.y.exclusivo, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Computador.de.escritorio.no.propio.pero.exclusivo<-factor(enc$Q14_RecursosInformaticos..Computador.de.escritorio.no.propio.pero.exclusivo, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Computador.propio..pero.no.exclusivo<-factor(enc$Q14_RecursosInformaticos..Computador.propio..pero.no.exclusivo,levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Computador.de.escritorio.ni.propio.ni.exclusivo<-factor(enc$Q14_RecursosInformaticos..Computador.de.escritorio.ni.propio.ni.exclusivo, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Tablet.sin.datos<-factor(enc$Q14_RecursosInformaticos..Tablet.sin.datos, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Tablet.con.datos.<-factor(enc$Q14_RecursosInformaticos..Tablet.con.datos., levels=c(0:1), labels=c('No','Si')) 
+enc$Q15_Alunizaje<-factor(enc$Q15_Alunizaje, levels=c(0:1), labels=c('No','Si')) 
+enc$Q17_Experimentos<-factor(enc$Q17_Experimentos, levels=c(0:1), labels=c('No','Si'))
+enc$Q16_EspionajeInternet<-factor(enc$Q16_EspionajeInternet, levels=c(0:1), labels=c('No','Si'))
+enc$Q18_Vacunas<-factor(enc$Q18_Vacunas, levels=c(0:1), labels=c('No','Si'))
+enc$Q19_EvidenciaFalsa<-factor(enc$Q19_EvidenciaFalsa, levels=c(0:1), labels=c('No','Si'))
+enc$Q20_RafagasSolares<-factor(enc$Q20_RafagasSolares, levels=c(0:1), labels=c('No','Si'))
+enc$Q21_TierraHueca<-factor(enc$Q21_TierraHueca,  levels=c(0:1), labels=c('No','Si'))
+enc$Q22_alienigenas<-factor(enc$Q22_alienigenas,  levels=c(0:1), labels=c('No','Si'))
+enc$Q23_CambioClimatico<-factor(enc$Q23_CambioClimatico, levels=c(0:1), labels=c('No','Si'))
+enc$Q26_Divisor..f.es.divisor.de.g.2.<-factor(enc$Q26_Divisor..f.es.divisor.de.g.2.,levels=c(0:1), labels=c('No','Si'))
+enc$Q26_Divisor..f.es.divisor.de.gh.<-factor(enc$Q26_Divisor..f.es.divisor.de.gh.,  levels=c(0:1), labels=c('No','Si'))
+enc$Q26_Divisor..f.es.divisor.de.h.g<-factor(enc$Q26_Divisor..f.es.divisor.de.h.g, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Internet.de.cable.propio<-factor(enc$Q14_RecursosInformaticos..Internet.de.cable.propio, levels=c(0:1), labels=c('No','Si'))
+enc$Q13_NoRoRStudio<-factor(enc$Q13_NoRoRStudio,levels=c(0:1), labels=c('No','Si'))
+```
+
+
+
 
 ```{r}
 summary(enc)
