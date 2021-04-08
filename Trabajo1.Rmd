@@ -90,11 +90,33 @@ enc$Q26_Divisor..f.es.divisor.de.g.2.<-factor(enc$Q26_Divisor..f.es.divisor.de.g
 enc$Q26_Divisor..f.es.divisor.de.gh.<-factor(enc$Q26_Divisor..f.es.divisor.de.gh.,  levels=c(0:1), labels=c('No','Si'))
 enc$Q26_Divisor..f.es.divisor.de.h.g<-factor(enc$Q26_Divisor..f.es.divisor.de.h.g, levels=c(0:1), labels=c('No','Si'))
 enc$Q14_RecursosInformaticos..Internet.de.cable.propio<-factor(enc$Q14_RecursosInformaticos..Internet.de.cable.propio, levels=c(0:1), labels=c('No','Si'))
-enc$Q13_NoRoRStudio<-factor(enc$Q13_NoRoRStudio,levels=c(0:1), labels=c('No','Si'))
 ```
 
 
+##### una tabla sencilla que muestra la distribución general de resultados de la variable *Q03_Carrera* de la base de datos; dado que existe un nombre único para cada carrera, no se considera que deba ser depurada, se procederá a ver en grafico la cantidad de estudiantes por carrrera
+```{r}
+Q03<-table(enc$Q03_Carrera)
+Q03
+```
+```{r}
+carrera <- Q03 / sum(Q03)*100
+carrera
+```
 
+##### Se realizará una gráfica de barras para representar los datos de los estudiantes y sus respectivas carreras, basandonos en su tabla de frecuencia
+```{r}
+Q03 <- c("Mate", "Estadístic.", "Ing. Física", "Sistemas", "Ing.Admin.", "Industrial.", "Otra")
+Frecuencia<- c(2, 54, 1, 26, 1, 2, 1)
+barplot(Frecuencia, names.arg = Q03, density = 20, las= 2, main= 'Cantidad de estudiantes\n encuestados por carrera', ylim=c(0,60), col= 'cyan')
+abline(h=seq(0,60,1), col= rep('grey', 6), lty=3)
+
+```
+##### Al graficar los datos de la cantidad de estudiantes encuestados por carrera era de esperarse encontrar una diferencia significativa entre la cantidad de estudiantes de *Estadística*  y las demás que se encuentran en la base de datos, puesto que sabemos que la asignatura es ofertada para el comienzo de su malla curricular, se esperaba además que la segunda candidad más alta fuesen los ingenieros de sistemas, sabiendo que pueden cursarla a lo largo de su carrera, pero cabe mencionar lo curioso de a qué carrera pertenece la persona que no se identificó. 
+
+```{r}
+enc<-enc %>%
+enc$Q13_NoRoRStudio<-factor(enc$Q13_NoRoRStudio)
+```
 
 ```{r}
 summary(enc)
