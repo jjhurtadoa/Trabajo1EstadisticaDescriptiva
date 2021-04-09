@@ -23,6 +23,7 @@ knitr::opts_chunk$set(echo = FALSE,
 ##### Valiendonos de las múltiples opciones que tenemos para presentar este proyecto, hacemos uso de esta biblioteca en particular
 ```{r}
 library(tidyverse)
+library(eeptools)
 ```
 
 ##### Se realiza la lectura de la base de datos de la que vamos a tomar información para realizar un analisis gráfico/exploratorio de lo que podamos encontrar en ella; se codifica con *UTF-08* para una lectura adecuada que permita tildes y letras en español.
@@ -102,6 +103,18 @@ Q03
 carrera <- Q03 / sum(Q03)*100
 carrera
 ```
+```{r}
+Area<- table(enc$Q24_area)
+Area
+```
+
+
+```{r}
+Ar<- c(3,9,13,39,5,18)
+are<-c("7.5*pi", "6*pi", "4.5*pi", "4*pi", "3*pi","Ninguna de las anteriores")
+pie(Ar, label = are, main = "Porcentaje de estudiantes en sus respectivos calculos del área ")
+
+```
 
 ##### Se realizará una gráfica de barras para representar los datos de los estudiantes y sus respectivas carreras, basandonos en su tabla de frecuencia
 ```{r}
@@ -112,6 +125,8 @@ abline(h=seq(0,60,1), col= rep('grey', 6), lty=3)
 
 ```
 ##### Al graficar los datos de la cantidad de estudiantes encuestados por carrera era de esperarse encontrar una diferencia significativa entre la cantidad de estudiantes de *Estadística*  y las demás que se encuentran en la base de datos, puesto que sabemos que la asignatura es ofertada para el comienzo de su malla curricular, se esperaba además que la segunda candidad más alta fuesen los ingenieros de sistemas, sabiendo que pueden cursarla a lo largo de su carrera, pero cabe mencionar lo curioso de a qué carrera pertenece la persona que no se identificó. 
+
+
 
 ```{r}
 enc<-enc %>%
@@ -126,7 +141,7 @@ summary(enc)
 glimpse(enc)
 ```
 
-
+##### De la variable que contiene la fecha de nacimiento, se crea una nueva columna con la edad de cada persona
 
 ```{r}
 enc <- enc %>%
@@ -134,12 +149,21 @@ enc <- enc %>%
 ```
 
 ```{r}
-summary(enc$Q02_FechaNac)
+enc <- enc %>%
+  mutate(edad = age_calc(enc$Q02_FechaNac, as.Date("2021-06-30"), units= "years"))%>%
+  mutate(edad=floor(edad))
 ```
 
 ```{r}
 enc <- enc %>%
   mutate(Edad= as.numeric(as.Date("2021-06-30") - Q02_FechaNac)/365.25)
+```
+
+
+```{r}
+enc<- enc %>% 
+enc$Q13_NoRoRStudio<- rename("Tipo de excusas de los estudiantes al instalar R." = enc$Q13_NoRoRStudio, "Frecuencia" = frecu)
+enc
 ```
 
 ```{r}
@@ -200,7 +224,7 @@ summary(enc$Edad)
 ```
 
 ```{r}
-hist(enc$Edad)
+hist(enc$edad)
 ```
 
 ```{r}
@@ -238,9 +262,7 @@ enc$Q08_PAPA[enc$Q08_PAPA == 45 & !is.na(enc$Q08_PAPA)] <- 4.5
 summary(enc$Q08_PAPA)
 ```
 ###  Se toma la decisión de omitir los datos en *NA* ya que no hacen una gran representacion.
-```{r}
-enc$Q08_PAPA # FALTA
-```
+
 
 ```{r}
 hist(enc$Q08_PAPA)
