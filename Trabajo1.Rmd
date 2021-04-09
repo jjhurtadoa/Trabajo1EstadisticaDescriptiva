@@ -107,12 +107,15 @@ carrera
 Area<- table(enc$Q24_area)
 Area
 ```
+```{r} 
+are <- Area / sum(Area)*100
+are
+```
 
 
 ```{r}
-Ar<- c(3,9,13,39,5,18)
-are<-c("7.5*pi", "6*pi", "4.5*pi", "4*pi", "3*pi","Ninguna de las anteriores")
-pie(Ar, label = are, main = "Porcentaje de estudiantes en sus respectivos calculos del área ")
+are<-c("7.5pi  3.4%", "6pi  10.3%", "4.5pi  15%", "4pi  44.9%", "3pi  5.8%","Ninguna de\n las anteriores  20.7%")
+pie(Ar, label = are, main = "Porcentaje\n estudiantes en sus respectivos calculos del área ")
 
 ```
 
