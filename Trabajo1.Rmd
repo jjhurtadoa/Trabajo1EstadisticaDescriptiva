@@ -375,7 +375,23 @@ lines(1:nrow(enc_no_acert_p2), rep(prom_Q27_na, nrow(enc_no_acert_p2)),
 par(op)
 ```
 
-
+```{r}
+enc_acert_p2 <- enc %>% 
+  filter(puntaje_pregunta2 == 3)
+enc_no_acert_p2 <- enc %>% 
+  filter(puntaje_pregunta2 != 3)
+op <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2))
+prom_Q27 <- mean(enc_acert_p2$Q27)
+with(enc_acert_p2, plot(Q27_PorcentDivisor, ylim = c(0, 100)))
+lines(1:nrow(enc_acert_p2), rep(prom_Q27, nrow(enc_acert_p2)), 
+      col = "red")
+prom_Q27_na <- mean(enc_no_acert_p2$Q27, na.rm = TRUE, ylim = c(0, 100))
+with(enc_no_acert_p2, plot(Q27_PorcentDivisor))
+lines(1:nrow(enc_no_acert_p2), rep(prom_Q27_na, nrow(enc_no_acert_p2)), 
+      col = "red")
+par(op)
+```
 
 
 
