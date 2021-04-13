@@ -16,15 +16,13 @@ knitr::opts_chunk$set(echo = FALSE,
 ```
 
 
-
-
-##### Valiendonos de las múltiples opciones que tenemos para presentar este proyecto, hacemos uso de esta biblioteca en particular
+##### Valiendonos de las múltiples opciones que tenemos para presentar este proyecto, hacemos uso de estas bibliotecas en particular
 ```{r}
 library(tidyverse)
 library(eeptools)
 ```
 
-##### Se realiza la lectura de la base de datos de la que vamos a tomar información para realizar un analisis gráfico/exploratorio de lo que podamos encontrar en ella; se codifica con *UTF-08* para una lectura adecuada que permita tildes y letras en español.
+###### Se realiza la lectura de la base de datos de la que vamos a tomar información para realizar un analisis gráfico/exploratorio de lo que podamos encontrar en ella; se codifica con *UTF-08* para una lectura adecuada que permita tildes y letras en español.
 ```{r}
 Enc <- read.csv("encuesta1.csv", encoding = "UTF-8")
 
@@ -45,8 +43,8 @@ glimpse(Enc)
 summary(Enc)
 ```
 
-##### Se cambian las variables de tipo caracter a factor para un adecuado manejo de los resultados encontrados en estas variables
-éstas en su análisis descriptivo
+
+##### Se cambian las variables de tipo caracter a factor sobre una nueva base de datos replicada; para un adecuado manejo de los resultados encontrados en éstas en su análisis descriptivo
 ```{r}
 enc <- Enc %>%
   mutate_if(is.character, as.factor)
@@ -92,47 +90,6 @@ enc$Q14_RecursosInformaticos..Internet.de.cable.propio<-factor(enc$Q14_RecursosI
 ```
 
 
-##### una tabla sencilla que muestra la distribución general de resultados de la variable *Q03_Carrera* de la base de datos; dado que existe un nombre único para cada carrera, no se considera que deba ser depurada, se procederá a ver en grafico la cantidad de estudiantes por carrrera
-```{r}
-Q03<-table(enc$Q03_Carrera)
-Q03
-```
-```{r}
-carrera <- Q03 / sum(Q03)*100
-carrera
-```
-```{r}
-Area<- table(enc$Q24_area)
-Area
-```
-```{r} 
-are <- Area / sum(Area)*100
-are
-```
-
-
-```{r}
-are<-c("7.5pi  3.4%", "6pi  10.3%", "4.5pi  15%", "4pi  44.9%", "3pi  5.8%","Ninguna de\n las anteriores  20.7%")
-pie(Area, label = are, main = "Porcentaje\n estudiantes en sus respectivos calculos del área ")
-
-```
-
-##### Se realizará una gráfica de barras para representar los datos de los estudiantes y sus respectivas carreras, basandonos en su tabla de frecuencia
-```{r}
-Q03 <- c("Mate", "Estadístic.", "Ing. Física", "Sistemas", "Ing.Admin.", "Industrial.", "Otra")
-Frecuencia<- c(2, 54, 1, 26, 1, 2, 1)
-barplot(Frecuencia, names.arg = Q03, density = 20, las= 2, main= 'Cantidad de estudiantes\n encuestados por carrera', ylim=c(0,60), col= 'cyan')
-abline(h=seq(0,60,1), col= rep('grey', 6), lty=3)
-
-```
-##### Al graficar los datos de la cantidad de estudiantes encuestados por carrera era de esperarse encontrar una diferencia significativa entre la cantidad de estudiantes de *Estadística*  y las demás que se encuentran en la base de datos, puesto que sabemos que la asignatura es ofertada para el comienzo de su malla curricular, se esperaba además que la segunda candidad más alta fuesen los ingenieros de sistemas, sabiendo que pueden cursarla a lo largo de su carrera, pero cabe mencionar lo curioso de a qué carrera pertenece la persona que no se identificó. 
-
-
-
-```{r}
-enc<-enc %>%
-enc$Q13_NoRoRStudio<-factor(enc$Q13_NoRoRStudio)
-```
 
 ```{r}
 summary(enc)
@@ -142,66 +99,21 @@ summary(enc)
 glimpse(enc)
 ```
 
-##### De la variable que contiene la fecha de nacimiento, se crea una nueva columna con la edad de cada persona
-
-```{r}
-enc <- enc %>%
-  mutate(Q02_FechaNac = as.Date(as.character(Q02_FechaNac), '%Y-%m-%d'))
-```
-
-```{r}
-enc <- enc %>%
-  mutate(edad = age_calc(enc$Q02_FechaNac, as.Date("2021-06-30"), units= "years"))%>%
-  mutate(edad=floor(edad))
-```
-
-```{r}
-enc <- enc %>%
-  mutate(Edad= as.numeric(as.Date("2021-06-30") - Q02_FechaNac)/365.25)
-```
 
 
-```{r}
-enc<- enc %>% 
-enc$Q13_NoRoRStudio<- rename("Tipo de excusas de los estudiantes al instalar R." = enc$Q13_NoRoRStudio, "Frecuencia" = frecu)
-enc
-```
 
-```{r}
-enc <- enc %>%
-  mutate(fecha_entrega =
-           as.POSIXct(strptime(Enviado.el.,format = "%d,/%m/%Y %H:%M:%S")),
-         tiempo_usado = as.integer(format(fecha_entrega, "%M")) +
-                        as.integer(format(fecha_entrega, "&S")) / 60 - 30)
-```
-
-
-```{r}
-enc <- enc %>% 
-  mutate(puntaje_pregunta2 = 
-  apply(enc %>% select(Q26_Divisor..f.es.divisor.de.g.2.,
-                            Q26_Divisor..f.es.divisor.de.gh.,
-                            Q26_Divisor..f.es.divisor.de.h.g),
-        1, sum))
-t_p2 <- table(enc$puntaje_pregunta2)
-t_p2
-pt_p2 <- t_p2 / sum(t_p2) * 100
-pt_p2
-```
-
-
-### La variable *Genero*, no requerirá hacer una depuración de los datos puesto que consideramos que se encuentra en orden dentro de la tabla original así que se procederá a representar dichos datos en su gráfica, para ello crearemos una tabla de frecuencias y su correspondiente valor porcentual.
-
-
+### La variable *Genero*, no requerirá hacer una depuración de los datos puesto que consideramos que se encuentra en orden dentro de la tabla original, así que se procederá a representar dichos datos en su gráfica, para ello crearemos una tabla de frecuencias y su correspondiente valor porcentual.
 ```{r depuración de la variable ** Género**}
 gen <- table(enc$Q01_Genero)
 gen
 ```
 
+
 ```{r}
 gen_p <- gen / sum(gen) * 100
 gen_p
 ```
+
 
 
 ```{r}
@@ -212,109 +124,185 @@ barplot(gen_p, las = 1,
         col =c ('Black', 'violet', 'cyan'), 
         legend.text = c('Masculino', 'Femenino', 'Otro'))
 text(bp1, gen_p + 7, paste(round(gen_p, 1), "%"))
-grid(NA, 9)
+grid(NA, )
 par(paramAnt)
 ```
 
-##### En la gráfica que representa la distribución por género se evidencia que la mayoría de los estudiantes que cursan esta asignatura son hombres, esto se debería a lo mejor a que la carrera es nueva y está mas enfocada en asuntos relacionados con la programación que desde tiempos anteriores se ha venido gestionando pr el género masculino
+
+##### En la gráfica que representa la distribución por género se evidencia claramente que la mayoría de los estudiantes que cursan esta asignatura son hombres, esto se debería a lo mejor a que la carrera es nueva y está mas enfocada en asuntos relacionados con la programación que desde tiempos anteriores se ha venido gestionando pr el género masculino, este resultado era de esperarse.
+
+
+
+
+##### De la variable que contiene la fecha de nacimiento, se crea una nueva columna con la edad de cada persona para su posterior análisis.
+```{r}
+enc <- enc %>%
+  mutate(edad = age_calc(enc$Q02_FechaNac, as.Date("2021-06-30"), units= "years"))%>%
+  mutate(edad=floor(edad))
+```
+
+
+```{r}
+edad<- table(enc$edad)
+edad
+```
 
 
 
 ```{r}
-summary(enc$Edad)
+summary(enc$edad)
 ```
 
-```{r}
-hist(enc$edad)
-```
 
 ```{r}
-hist(enc$Edad, nclass = 20)
+boxplot(enc$Q08_PAPA~enc$edad,col="gold",xlab="Edades",ylab="Distribución PAPA",
+        main="Distribución PAPA de acuerdo a la edad",
+        ylim= c(2.8,5),
+        xlim= c(10,40))
 ```
+
+
+
+
 
 ```{r}
 paramAnt <- par(no.readonly = TRUE)
-hist(enc$Edad, freq = FALSE, nclass = 20, col = "violet",
+hist(enc$edad, freq = FALSE,nclass = 23, col = "aquamarine4",
      las = 1, 
-     main = "Distribución de la edad",
-     xlab = "Edad (años)",
+     main = "Distribución de la densidad por edad de estudiantes encuestados",
+     xlab = "Edad en años",
      ylab = "Densidad",
      ylim = c(0, 0.20),
      xlim = c(15, 40))
-lines(density(enc$Edad), col = "grey10", lwd = 5)
+lines(density(enc$edad), col = "red", lwd = 2)
+grid(NA, 25)
+par(paramAnt)
+```
+
+###### La anterior gráfica de los datos de las edades representa la densidad acumulada de los puntos del eje x -las edades-, en las cuales se localizan los máximos globales de densidad, y en general la densidad acúmulada de cada una de estas edades, en ella podemos analizar que pese a que la mayoria de estudiantes son de edades jovenes, debido a que podrían estar iniciando apenas sus carreras; Qué pasa con estos resultados que muestran a estudiantes de edades mayores a 30 años?; ¿Serán errores en la base de datos? y Qué pasa con estos espacios vacíos entre barras?  Analizando esta situación nos lleva a pensar que es completamente normal que hayan personas de mayores edades cursando una carrera en la universidad, ya sea por inconvenientes personales que iniciaron a destiempo, en comparación con la mayoría que comenzaron entre los 17 y 20 años; o aún no logran salir de está, y respecto a los espacios en blaco, es que no existe ningún estudiante con esa edad que se muestra vacía en el histogtrama. 
+
+
+```{r}
+paramAnt <- par(no.readonly = TRUE)
+barplot(enc$Q08_PAPA, enc$edad, freq = FALSE, nclass = 23, col = "antiquewhite3",
+     las = 1, 
+     main = "Distribución de la densidad por edad de estudiantes encuestados",
+     xlab = "Edad (años)",
+     ylab = "Densidad",
+     ylim = c(0.0, 5.0),
+     xlim = c(15, 40))
+par(paramAnt)
+```
+
+
+
+##### Se presenta un histograma para visualizar la frecuencia de las edades de los estudiantes encuenstados
+```{r}
+paramAnt <- par(no.readonly = TRUE)
+hist(enc$edad,
+     main = "Frecuencia por edad de los estudiantes de la encuesta",
+     xlab = "Edad en años cumplidos",
+     ylab = "Cantidad de estudiantes por edad",
+     col = "lightgrey",
+     border = "cyan",
+     xlim = c(15,40), nclass = 22,
+     ylim = c(0,20), las=1)
+grid(NA, 30)
 par(paramAnt)
 ```
 
 
 
 
-#### Se filtra la fila en donde la variable **Q08_PAPA** presenta un error atípico y para tomar la decisión de corregir el dato, pues consideramos que pudo deberse a un error en la digitación de éste
+```{r}
+promedioedad <- mean(enc$edad)
+medianaedad <- median(enc$edad)
+desv_Est_edad <- sd(enc$edad)
+
+boxplot(enc$edad, horizontal = TRUE,
+        main = "Presentación por cuartiles de la distribución de las edades", 
+        col = "azure1",
+        pch = 19, notch = TRUE)
+points(promedioEdad, 
+       1, 
+       pch = 19, 
+       col = c("blue", "purple"))
+legend("topright", 
+       title = "  Convención",
+       legend = c("Promedio", "Error estandar"), 
+       col = "blue", 
+       pch = c(19, NA),
+       lty = c(NA, 1))
+arrows(promedioedad -  desv_Est_Edad / sqrt(nrow(enc)), 1,
+         promedioedad + desv_Est_Edad / sqrt(nrow(enc)), 1,
+         angle = 90,
+         length = 0.1, 
+         code = 3,
+         col = "GREY")
+```
+
+
+##### una tabla sencilla que muestra la distribución general de resultados de la variable Q03_Carrera de la base de datos; dado que existe un nombre único para cada carrera, no se considera que deba ser depurada, se procederá a ver en grafico la cantidad de estudiantes por carrrera
+```{r}
+Q03<-table(enc$Q03_Carrera)
+Q03
+```
+
+
+```{r}
+carrera <- Q03 / sum(Q03)*100
+carrera
+```
+
+##### Se realizará una gráfica de barras para representar los datos de los estudiantes y sus respectivas carreras, basandonos en su tabla de frecuencia
+```{r}
+Q03 <- c("Mate", "Estadístic.", "Ing. Física", "Sistemas", "Ing.Admin.", "Industrial.", "Otra")
+Frecuencia<- c(2, 54, 1, 26, 1, 2, 1)
+barplot(Frecuencia, names.arg = Q03, density = 20, las= 2, main= 'Cantidad de estudiantes\n encuestados por carrera', ylim=c(0,60), col= 'cyan')
+abline(h=seq(0,60,1), col= rep('grey', 6), lty=3)
+```
+
+##### Al graficar los datos de la cantidad de estudiantes encuestados por carrera era de esperarse encontrar una diferencia significativa entre la cantidad de estudiantes de Estadística  y las demás que se encuentran en la base de datos, puesto que sabemos que la asignatura es ofertada para el comienzo de su malla curricular, se esperaba además que la segunda candidad más alta fuesen los ingenieros de sistemas, sabiendo que pueden cursarla a lo largo de su carrera, pero cabe mencionar lo curioso de a qué carrera pertenece la persona que no se identificó. 
+
+
+
+###  Se toma la decisión de omitir los datos en NA ya que no hacen una gran representacion y se filtra la fila en donde la variable *Q08_PAPA* presenta un error atípico y para tomar la decisión de corregir el dato, pues consideramos que pudo deberse a un error en la digitación de éste
 ```{r depuracion de la variable Q08_PAPA y analisis descriptivo}
 enc %>%
   filter(Q08_PAPA > 5)
 ```
+
+
 
 ```{r}
 enc$Q08_PAPA[enc$Q08_PAPA == 45 & !is.na(enc$Q08_PAPA)] <- 4.5
 ```
 
 
+
 ```{r}
 summary(enc$Q08_PAPA)
 ```
-###  Se toma la decisión de omitir los datos en *NA* ya que no hacen una gran representacion.
 
 
 ```{r}
-hist(enc$Q08_PAPA)
+boxplot(enc$Q08_PAPA,main = "Distribución PAPA",
+        outline = FALSE)
 ```
 
 
 
-
-
-
-
 ```{r}
-boxplot(Enc$Q08_PAPA, horizontal = TRUE)
-```
-```{r}
-bxp1<-boxplot(Enc$Q08_PAPA, horizontal = TRUE,  notch= TRUE, col= 'violet')
-title(main= 'Distribución_PAPA', font=2, xlab='Promedio Academico Ponderado Acumulado')
-points(mean(enc$Q08_PAPA, na.rm=TRUE),1, col=' green', pch=19, cex=2)# agranda o disminuye el punto verde
+bxp1<-boxplot(enc$Q08_PAPA, horizontal = TRUE,  notch= TRUE, col= 'violet')
+title(main= 'Distribución_PAPA', 
+      outline = FALSE, 
+      font=2, 
+      xlab='Promedio Academico Ponderado Acumulado')
+points(mean(enc$Q08_PAPA, na.rm=FALSE),1, col=' green', pch=19, cex=2)
 legend(4.2,1.5, legend=c('Promedio'), pch=19, col= 'green')
 ```
 
-```{r}
-dotchart(enc$Q08_PAPA)
-```
 
-```{r}
-promedioEdad <- mean(enc$Edad)
-medianaEdad <- median(enc$Edad)
-desv_Est_Edad <- sd(enc$Edad)
-
-boxplot(enc$Edad, horizontal = TRUE,
-        main = "Boxplot para edad", 
-        col = "lightblue",
-        pch = 19, notch = TRUE)
-points(promedioEdad, 
-       1, 
-       pch = 19, 
-       col = c("red", "purple"))
-legend("topright", 
-       title = "Convención",
-       legend = c("Promedio", "Error estandard"), 
-       col = "red", 
-       pch = c(19, NA),
-       lty = c(NA, 1))
-arrows(promedioEdad -  desv_Est_Edad / sqrt(nrow(enc)), 1,
-         promedioEdad + desv_Est_Edad / sqrt(nrow(enc)), 1,
-         angle = 90,
-         length = 0.1, 
-         code = 3,
-         col = "GREY10")
-```
 
 ```{r}
 table(enc$Q10_Estrato)
@@ -326,10 +314,34 @@ barplot(table(enc$Q10_Estrato))
 
 
 
+
 ```{r}
 with(enc, plot(Q10_Estrato, Q08_PAPA, notch = TRUE))
 ```
-R
+
+######  Se representará por medio de un gráfico de dispersión el comportamiento de PAPA deacuerdo a la edad de los estudiantes, para reforzar o refutar la idea de que a mayor edad, mejor será el promedio académico ya que se cuenta con más experiencia, y por ende mejores métodos de aprendizaje adquiridos a lo largo de los años; o por el contrario, a mayor edad, mayor compromiso y responsabilidad y poco tiempo para dedicarle a las asigaturas.. ¡Veamoslo!
+```{r}
+plot(enc$Q08_PAPA, enc$edad, 
+     main = "Dispersión de promedios por edades", las=1,
+     ylab = "Promedio Acádemico Ponderado Acumulado",
+     xlab = "Edades",
+     xlim = c(15,45),
+     ylim = c(0,5), las=1)
+lines(enc$Q08_PAPA)
+abline(h = mean(enc$Q08_PAPA), col = "red")
+```
+
+###### Tambien se intenta hacer una visualización del comportamiento del PAPA con respecto a las carreras registradas en la base de datos, para verificar si tal como pensamos los estudiantes de Estadistica por ser semi-primíparos en la universidad tienen un mayor PAPA
+```{r}
+boxplot(enc$Q08_PAPA ~ enc$Q03_Carrera, col = "lightblue",
+        main = "Dispersión de promedios por carreras", las=1,
+        ylab = "Promedio Acádemico Ponderado Acumulado",
+        xlab = "Carreras",
+        #xlim = c(15,45),
+        ylim = c(0,5), las=1)
+```
+
+
 
 ```{r}
 enc_Estrato1 <- enc %>% 
@@ -339,9 +351,11 @@ summary(enc_Estrato1$Q08_PAPA)
 ```
 
 
+
 ```{r}
 with(enc, plot(Q03_Carrera, Q08_PAPA, notch = TRUE))
 ```
+
 
 
 ```{r}
@@ -349,11 +363,13 @@ with(enc, scatter.smooth(tiempo_usado, Q08_PAPA))
 ```
 
 
+
 ```{r}
 with(enc, plot(Q27_PorcentDivisor))
 lines(1:nrow(enc), rep(pt_p2[3], nrow(enc)), 
       col = "red")
 ```
+
 
 ```{r}
 enc_acert_p2 <- enc %>% 
@@ -376,8 +392,51 @@ par(op)
 
 
 
+```{r}
+Area<- table(enc$Q24_area)
+Area
+```
 
 
+```{r} 
+are <- Area / sum(Area)*100
+are
+```
+
+ 
+ 
+###### Se presentará en un grafico de pastel el porcentaje de estudiantes que seleccionaron cada una de las posibles opciones de respuesta a la pregunta sobre área sombreada de una circunferencia
+```{r}
+are<-c("7.5pi  3.4%", "6pi  10.3%", "4.5pi  15%", "4pi  44.9%", "3pi  5.8%","Ninguna de\n las anteriores  20.7%")
+pie(Ar, label = are, main = "Porcentaje de\n estudiantes en sus respectivos calculos del área ")
+```
 
 
+```{r}
+enc <- enc %>%
+  mutate(fecha_entrega =
+           as.POSIXct(strptime(Enviado.el.,format = "%d,/%m/%Y %H:%M:%S")),
+         tiempo_usado = as.integer(format(fecha_entrega, "%M")) +
+                        as.integer(format(fecha_entrega, "&S")) / 60 - 30)
+```                                                                                                                                                                              
 
+```{r}
+enc <- enc %>% 
+  mutate(puntaje_pregunta2 = 
+  apply(enc %>% select(Q26_Divisor..f.es.divisor.de.g.2.,
+                            Q26_Divisor..f.es.divisor.de.gh.,
+                            Q26_Divisor..f.es.divisor.de.h.g),
+        1, sum))
+t_p2 <- table(enc$puntaje_pregunta2)
+t_p2
+pt_p2 <- t_p2 / sum(t_p2) * 100
+pt_p2
+```
+ 
+
+
+```{r}
+enc<- enc %>% 
+enc$Q13_NoRoRStudio<- rename("Tipo de excusas de los estudiantes al instalar R." = enc$Q13_NoRoRStudio, "Frecuencia" = frecu)
+enc
+```
