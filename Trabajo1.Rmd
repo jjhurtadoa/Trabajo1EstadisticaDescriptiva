@@ -123,7 +123,7 @@ barplot(gen_p, las = 1,
         ylim = c(0,100),
         col =c ('Black', 'violet', 'cyan'), 
         legend.text = c('Masculino', 'Femenino', 'Otro'))
-text(bp1, gen_p + 7, paste(round(gen_p, 1), "%"))
+#text(bp1, gen_p + 7, paste(round(gen_p, 1), "%"))
 grid(NA, )
 par(paramAnt)
 ```
@@ -135,19 +135,25 @@ par(paramAnt)
 
 
 ##### De la variable que contiene la fecha de nacimiento, se crea una nueva columna con la edad de cada persona para su posterior análisis.
+
+
 ```{r}
-enc <- enc %>%
-  mutate(edad = age_calc(enc$Q02_FechaNac, as.Date("2021-06-30"), units= "years"))%>%
-  mutate(edad=floor(edad))
+enc <- enc %>% 
+  mutate(Q02_FechaNac = as.Date(as.character(Q02_FechaNac), "%Y-%m-%d"))
+```
+
+```{r}
+# Cálculo de la edad
+enc <- enc %>% 
+  mutate(edad = as.numeric(as.Date("2021-06-30") - Q02_FechaNac)/365.25)
+  
 ```
 
 
 ```{r}
-edad<- table(enc$edad)
-edad
+enc[,"edad"] <- floor(enc[,"edad"])
+enc[,"edad"]
 ```
-
-
 
 ```{r}
 summary(enc$edad)
@@ -211,19 +217,22 @@ grid(NA, 30)
 par(paramAnt)
 ```
 
+```{r}
+promedioedad <- mean(enc$edad) 
+medianaedad <- median(enc$edad)
+desv_Est_edad <- sd(enc$edad)
+```
 
 
 
 ```{r}
-promedioedad <- mean(enc$edad)
-medianaedad <- median(enc$edad)
-desv_Est_edad <- sd(enc$edad)
+
 
 boxplot(enc$edad, horizontal = TRUE,
         main = "Presentación por cuartiles de la distribución de las edades", 
         col = "azure1",
         pch = 19, notch = TRUE)
-points(promedioEdad, 
+points(promedioedad, 
        1, 
        pch = 19, 
        col = c("blue", "purple"))
@@ -233,8 +242,8 @@ legend("topright",
        col = "blue", 
        pch = c(19, NA),
        lty = c(NA, 1))
-arrows(promedioedad -  desv_Est_Edad / sqrt(nrow(enc)), 1,
-         promedioedad + desv_Est_Edad / sqrt(nrow(enc)), 1,
+arrows(promedioedad -  desv_Est_edad / sqrt(nrow(enc)), 1,
+         promedioedad + desv_Est_edad / sqrt(nrow(enc)), 1,
          angle = 90,
          length = 0.1, 
          code = 3,
@@ -358,36 +367,7 @@ with(enc, plot(Q03_Carrera, Q08_PAPA, notch = TRUE))
 
 
 
-```{r}
-with(enc, scatter.smooth(tiempo_usado, Q08_PAPA))
-```
 
-
-
-```{r}
-with(enc, plot(Q27_PorcentDivisor))
-lines(1:nrow(enc), rep(pt_p2[3], nrow(enc)), 
-      col = "red")
-```
-
-
-```{r}
-enc_acert_p2 <- enc %>% 
-  filter(puntaje_pregunta2 == 3)
-enc_no_acert_p2 <- enc %>% 
-  filter(puntaje_pregunta2 != 3)
-op <- par(no.readonly = TRUE)
-par(mfrow = c(1, 2))
-prom_Q27 <- mean(enc_acert_p2$Q27)
-with(enc_acert_p2, plot(Q27_PorcentDivisor, ylim = c(0, 100)))
-lines(1:nrow(enc_acert_p2), rep(prom_Q27, nrow(enc_acert_p2)), 
-      col = "red")
-prom_Q27_na <- mean(enc_no_acert_p2$Q27, na.rm = TRUE, ylim = c(0, 100))
-with(enc_no_acert_p2, plot(Q27_PorcentDivisor))
-lines(1:nrow(enc_no_acert_p2), rep(prom_Q27_na, nrow(enc_no_acert_p2)), 
-      col = "red")
-par(op)
-```
 
 
 
@@ -408,7 +388,7 @@ are
 ###### Se presentará en un grafico de pastel el porcentaje de estudiantes que seleccionaron cada una de las posibles opciones de respuesta a la pregunta sobre área sombreada de una circunferencia
 ```{r}
 are<-c("7.5pi  3.4%", "6pi  10.3%", "4.5pi  15%", "4pi  44.9%", "3pi  5.8%","Ninguna de\n las anteriores  20.7%")
-pie(Ar, label = are, main = "Porcentaje de\n estudiantes en sus respectivos calculos del área ")
+pie(Area, label = are, main = "Porcentaje de\n estudiantes en sus respectivos calculos del área ")
 ```
 
 
@@ -420,6 +400,17 @@ enc <- enc %>%
                         as.integer(format(fecha_entrega, "&S")) / 60 - 30)
 ```                                                                                                                                                                              
 
+
+DE AQUI PARA ABAJO FALTA ARREGLAR !!!!
+
+
+    !
+    !
+    !
+    !
+    V
+
+    
 ```{r}
 enc <- enc %>% 
   mutate(puntaje_pregunta2 = 
@@ -432,7 +423,34 @@ t_p2
 pt_p2 <- t_p2 / sum(t_p2) * 100
 pt_p2
 ```
+
+
  
+```{r}
+with(enc, scatter.smooth(tiempo_usado, Q08_PAPA))
+```
+```{r}
+with(enc, plot(Q27_PorcentDivisor))
+lines(1:nrow(enc), rep(pt_p2[3], nrow(enc)), 
+      col = "red")
+```
+```{r}
+enc_acert_p2 <- enc %>% 
+  filter(puntaje_pregunta2 == 3)
+enc_no_acert_p2 <- enc %>% 
+  filter(puntaje_pregunta2 != 3)
+op <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2))
+prom_Q27 <- mean(enc_acert_p2$Q27)
+with(enc_acert_p2, plot(Q27_PorcentDivisor, ylim = c(0, 100)))
+lines(1:nrow(enc_acert_p2), rep(prom_Q27, nrow(enc_acert_p2)), 
+      col = "red")
+prom_Q27_na <- mean(enc_no_acert_p2$Q27, na.rm = TRUE, ylim = c(0, 100))
+with(enc_no_acert_p2, plot(Q27_PorcentDivisor))
+lines(1:nrow(enc_no_acert_p2), rep(prom_Q27_na, nrow(enc_no_acert_p2)), 
+      col = "red")
+par(op)
+```
 
 
 ```{r}
