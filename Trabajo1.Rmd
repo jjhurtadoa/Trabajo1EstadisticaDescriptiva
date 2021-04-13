@@ -16,6 +16,8 @@ knitr::opts_chunk$set(echo = FALSE,
 ```
 
 
+
+
 ##### Valiendonos de las múltiples opciones que tenemos para presentar este proyecto, hacemos uso de esta biblioteca en particular
 ```{r}
 library(tidyverse)
@@ -370,6 +372,7 @@ lines(1:nrow(enc_no_acert_p2), rep(prom_Q27_na, nrow(enc_no_acert_p2)),
       col = "red")
 par(op)
 ```
+
 
 
 
