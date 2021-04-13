@@ -1,13 +1,9 @@
 ---
 title: "Primer_taller_grupal_sobre_encuesta_en_clase"
-authors:"Omar David Mercado",
-        "Zuleima Carriazo",
-        "Juan Jose Hurtado Alvarez",
-        "ESteban Grajales",
-        "Juan Manuel"
-email:  "omercado@unal.edu.co", 
-        "zcarriazo@unal.edu.co",
-        "jgrajalesh@unal.edu.co" 
+authors:"Omar David Mercado -omercado@unal.edu.co,
+        "Zuleima Carriazo- zcarriazo@unal.edu.co,
+        "ESteban Grajales-jgrajalesh@unal.edu.co,
+        Juan Manuel,Juan Jose Hurtado Alvarez",
 date: "Miercoles 14 de Abril de 2021"
 output: html_document
 ---
