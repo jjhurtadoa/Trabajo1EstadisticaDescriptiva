@@ -20,6 +20,13 @@ knitr::opts_chunk$set(echo = FALSE,
 ```
 
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE
+                      )
+```
+
 ##### Valiendonos de las múltiples opciones que tenemos para presentar este proyecto, hacemos uso de esta biblioteca en particular
 ```{r}
 library(tidyverse)
