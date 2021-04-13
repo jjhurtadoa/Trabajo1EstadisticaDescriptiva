@@ -20,13 +20,6 @@ knitr::opts_chunk$set(echo = FALSE,
 ```
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE,
-                      message = FALSE,
-                      warning = FALSE
-                      )
-```
-
 ##### Valiendonos de las múltiples opciones que tenemos para presentar este proyecto, hacemos uso de esta biblioteca en particular
 ```{r}
 library(tidyverse)
@@ -122,7 +115,7 @@ are
 
 ```{r}
 are<-c("7.5pi  3.4%", "6pi  10.3%", "4.5pi  15%", "4pi  44.9%", "3pi  5.8%","Ninguna de\n las anteriores  20.7%")
-pie(Ar, label = are, main = "Porcentaje\n estudiantes en sus respectivos calculos del área ")
+pie(Area, label = are, main = "Porcentaje\n estudiantes en sus respectivos calculos del área ")
 
 ```
 
