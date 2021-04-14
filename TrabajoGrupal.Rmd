@@ -179,6 +179,18 @@ Q04
 ```{r}
 summary(enc$Q05_Saber11)
 ```
+
+```{r}
+enc %>%
+  filter(enc$Q05_Saber11 > 500)
+```
+
+##### Se depuran unos resultados que se salen del rango de la respuesta en la  variable enc$Q05_Saber11, asumiendo que fue un error de digitación al redactar el valor.
+```{r}
+enc$Q05_Saber11[enc$Q05_Saber11 == 580 & !is.na(enc$Q06_PercentilSaber11)] <- 58
+
+```
+
 ### Distribución de los puntajes de los estudiantes
 ```{r}
 boxplot(enc$Q05_Saber11, main = "Distribución Puntaje Saber 11", notch= TRUE,
@@ -189,6 +201,21 @@ boxplot(enc$Q05_Saber11, main = "Distribución Puntaje Saber 11", notch= TRUE,
 ```{r}
 summary(enc$Q06_PercentilSaber11)
 ```
+```{r depuracion de la variable Q08_PAPA y analisis descriptivo}
+enc %>%
+  filter(enc$Q06_PercentilSaber11 > 100)
+```
+
+##### Se depuran unos resultados que se salen del rango de la respuesta en la  variable enc$Q06_PercentilSaber11
+```{r}
+enc$Q06_PercentilSaber11[enc$Q06_PercentilSaber11 == 260.0 & !is.na(enc$Q06_PercentilSaber11)] <- 54.8
+enc$Q06_PercentilSaber11[enc$Q06_PercentilSaber11 == 230.0 & !is.na(enc$Q06_PercentilSaber11)] <- 56.12
+```
+
+```{r}
+summary(enc$Q06_PercentilSaber11)
+```
+
 ### Distribución de los percentiles prueba de los estudiantes
 ```{r}
 boxplot(enc$Q06_PercentilSaber11, main = "Distribución Percentil Pruebas Saber 11", notch= TRUE,
@@ -272,40 +299,30 @@ Falta
 ```{r}
 summary(enc$Q15_Alunizaje)
 ```
-```{r}
-barplot(table(enc$Q15_Alunizaje))
-```
+
 ##Análisis de la variable Espionaje por Internet ¿Cree en el Espionaje a traves del Internet?
 ```{r}
 summary(enc$Q16_EspionajeInternet)
 ```
-```{r}
-barplot(table(enc$Q16_EspionajeInternet))
-```
+
 
 ##Análisis de la variable Experimentos ¿Se realizaron experimento en personas afroamericanas en donde no se suministró la penicilina a enfermos con sífilis?
 ```{r}
 summary(enc$Q17_Experimentos)
 ```
-```{r}
-barplot(table(enc$Q17_Experimentos))
-```
+
 
 ##Análisis de la variable Vacunas ¿Las vacunas no sirven y son una conspiración de las multinacionales farmacéuticas para enriquecers?
 ```{r}
 summary(enc$Q18_Vacunas)
 ```
-```{r}
-barplot(table(enc$Q18_Vacunas))
-```
+
 
 ##Análisis de la variable Evidencia Falsa ¿Se utilizó evidencia falsa por el FBI para condenar personas inocentes durante el siglo pasado en EEUU?
 ```{r}
 summary(enc$Q19_EvidenciaFalsa)
 ```
-```{r}
-barplot(table(enc$Q19_EvidenciaFalsa))
-```
+
 
 
 ##Análisis de la variable Rafaga Solares ¿Las ráfagas solares causan los sismos en la tierra?
@@ -313,27 +330,23 @@ barplot(table(enc$Q19_EvidenciaFalsa))
 ```{r}
 summary(enc$Q20_RafagasSolares)
 ```
-```{r}
-barplot(table(enc$Q20_RafagasSolares))
-```
+
 
 ##Análisis de la variable Tierra Hueca ¿La tierra es hueca y en su interior existe una civilización oculta?
 
 ```{r}
 summary(enc$Q21_TierraHueca)
 ```
-```{r}
-barplot(table(enc$Q21_TierraHueca))
-```
+
 
 ##Análisis de la variable Alienigenas ¿Los alienígenas visitaron las civilizaciones antiguas, influyeron en sus historia y construyeron los mega monumentos de la antigüedad?
 
+
 ```{r}
-summary(enc$Q22_alienigenas)
+ali<-table(enc$Q22_alienigenas)
+ali
 ```
-```{r}
-barplot(table(enc$Q22_alienigenas))
-```
+
 
 ##Análisis de la variable Cambio Climatico ¿Los efectos del cambio climático son naturales, y el escándalo se debe a conspiraciones de ambientalistas y de ciertos gremios económicos?
 
@@ -398,8 +411,6 @@ axis(1,1:7, labels= c("Matemáticas", "Ingeniería de sistemas", "Estadística",
 
 
 ```
-
-
 
 
 Esta pregunta se puede responder claramente con un *No* a nivel general de todos los estudiantes, y al ser comparado con los estudiantes de ingeniería de sistemas, no se puede concluir que grupo tiene el PAPA más elevado.
@@ -571,10 +582,7 @@ Los estudiantes que no tenían instalado Rstudio marcan  tendencia de ser de sem
 Nos preguntamos en  los estudiantes que creen que los alienígenas ayudaron civilizaciones antiguas la edad cómo influye. Si al ser mayor se cree menos en conspiraciones o por el contrario tiene más mitos impregnados en sí, también es interesante analizar si el nivel de avance en la carrera influye en esta respuesta 
 
 
-###Gráfica de puntos, el color rojo indica que el estudiante cree que los alienígenas ayudaron civilizaciones antiguas, el color azul que no
-
-
-
+###Gráfica de puntos, el color rojo indica que el estudiante cree que los alienígenas ayudaron a civilizaciones antiguas, el color azul que no
 
 
 ```{r,fig.width=7.5, fig.height=6}
@@ -586,12 +594,10 @@ Nos preguntamos en  los estudiantes que creen que los alienígenas ayudaron civi
      pch= 19,
      col= ifelse(enc$Q22_alienigenas == "Si", "red", "blue"),
      
-     )
-
-
+ )
 
 ```
-
+La grafica nos demuestra ue mientras más se avanza en las carreras; menor creencia en teorias conspiratorias se tiene. Y ue ademas estas teorias son mas creibles en personas más jovenes.
 ```{r}
 enc_alien <- enc %>%
 
@@ -634,21 +640,22 @@ Queremos saber si a los mayores les va mejor que a los jovenes dependiendo  tamb
 summary(enc$Q08_PAPA)
 ```
 
-###Gráfica de puntos, los  colores nos indican en cuál cuartil están, rojo para papa < 3.8, dorado para   3.8 < papa < 4.042, verde para 4.042 < papa < 4.3, azul para papa > 4.3
+### Gráfica de puntos, los  colores nos indican en cuál cuartil están, rojo para papa < 3.8, dorado para   3.8 < papa < 4.042, verde para 4.042 < papa < 4.3, azul para papa > 4.3
 ```{r,fig.width=7.5, fig.height=6}
  par(oma=c(0,8,0,0))
- plot(enc$edad, enc$Q04_Semestre, notch=TRUE,
+ plot(enc$Q24_area, enc$Q06_PercentilSaber11, notch=TRUE,
      "p",
-     xlab="Edad",ylab=" ",
+     xlab="PERCENTIL DEL ICFES",ylab="AREA",
      
      pch= 19,
-     col= ifelse(enc$Q08_PAPA < 3.8, "red", ifelse(enc$Q08_PAPA < 4.042, "darkgoldenrod1", ifelse(enc$Q08_PAPA < 4.3, "forestgreen", "blue"))),
+     col= ifelse(enc$Q10_Estrato< 3.8, "red", ifelse(enc$Q08_PAPA < 4.042, "darkgoldenrod1", ifelse(enc$Q08_PAPA < 4.3, "forestgreen", "blue"))),
      
      )
 
 
 
 ```
+En la grafica p odemos concluir que aquellos estudiantes que presentan mejor promedio académico son los de semestres entre el 4to y 6to, y además estos estudiantes tienen edades entre los 22 a 25 años.
 
 ### hacer el análisis numérico  tendremos en cuenta la media, para dividir los que están abajo de la media como menos buenos que los que están arriba
 ```{r}
@@ -692,12 +699,12 @@ Poner conclusiones de este análiss!!!!!!! porfa
 Ahora nos interesa saber si teniendo en cuenta la edad, el estrato influye en el papa de las personas 
 
 
-###Gráfica de puntos, los  colores nos indican en cuál cuartil están, rojo para papa < 3.8, dorado para   3.8 < papa < 4.042, verde para 4.042 < papa < 4.3, azul para papa > 4.3
+### Gráfica de puntos, los  colores nos indican en cuál cuartil están, rojo para papa < 3.8, dorado para   3.8 < papa < 4.042, verde para 4.042 < papa < 4.3, azul para papa > 4.3
 ```{r,fig.width=7.5, fig.height=6}
  par(oma=c(0,8,0,0))
  plot(enc$edad, enc$Q10_Estrato, notch=TRUE,
      "p",
-     xlab="Edad",ylab="Estrato ",
+     xlab="Edad", ylab="Estrato ",
      
      pch= 19,
      col= ifelse(enc$Q08_PAPA < 3.8, "red", ifelse(enc$Q08_PAPA < 4.042, "darkgoldenrod1", ifelse(enc$Q08_PAPA < 4.3, "forestgreen", "blue"))),
@@ -707,7 +714,29 @@ Ahora nos interesa saber si teniendo en cuenta la edad, el estrato influye en el
 
 
 ```
+###### Con respecto al estrato y edad notamos que mientras más jovenes y de estratos bajos; el PAPA se puede considerar medianamente alto, entre *4 y 4.3* 
+
 ###Análisis numérico de los estudiantes con un PAPA "bueno" según el estrato
+
+```{r}
+summary(enc$Q06_PercentilSaber11)
+```
+CORREGIR!!!!!!!!
+```{r,fig.width=7.5, fig.height=6}
+ par(oma=c(0,8,0,0))
+ plot(enc$Q24_area, enc$Q10_Estrato, notch=TRUE,
+     
+     xlab="", ylab="Estrato ",
+     
+     pch= 19,
+     col= ifelse(enc$Q06_PercentilSaber11 < 40, "red", ifelse(enc$Q06_PercentilSaber11< 70, "darkgoldenrod1", ifelse(enc$Q06_PercentilSaber11 < 100, "forestgreen", "blue"))),
+     
+     )
+
+
+
+```
+
 
 ```{r}
 summary( enc_papa_bueno$Q10_Estrato )
@@ -722,12 +751,25 @@ summary(enc_papa_no_bueno$Q10_Estrato)
 ```{r}
 summary( enc_papa_bueno$edad )
 ```
-###Análisis numérico de los estudiantes con un PAPA "no bueno" según la edad
+#### Análisis numérico de los estudiantes con un PAPA "no bueno" según la edad
 ```{r}
 summary(enc_papa_no_bueno$edad)
 ```
+  
+```{r,fig.width=7.5, fig.height=6}
+par(oma=c(0,8,0,0))
+ plot(enc$edad, enc$Q06_PercentilSaber11, notch=TRUE,
+     "p",
+     xlab="Edad",ylab="Percentil pruebas del saber ",
+     
+     pch= ifelse(enc$Q16_EspionajeInternet == "Si", 20, 0),
+     col= ifelse(enc$Q08_PAPA < 3.8, "red", ifelse(enc$Q08_PAPA < 4.042, "darkgoldenrod1", ifelse(enc$Q08_PAPA < 4.3, "forestgreen", "blue"))),
+     
+     )
 
-Poner conclusiones de este análiss!!!!!!! porfa
+```
+En la población notamos que las personas con edades inferiores a 25 años cuyos percentiles obtenidos son mayores o iguales a 80 tienden a creer en el espionaje por ser la población que más navega en internet, (dentados con puntos)
+
 
 
 ## RECOMENDACIONES
