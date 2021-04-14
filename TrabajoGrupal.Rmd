@@ -346,9 +346,12 @@ summary(enc$Q23_CambioClimatico)
 
 ##Análisis de la variable área
 
+
 ```{r}
-summary(enc$Q24_area)
+Area<- table(enc$Q24_area)
+Area
 ```
+
 ### Cambio de la variable área Frecuencia relativa para hacer un análisis posteriormente.
 ```{r} 
 are <- Area / sum(Area)*100
@@ -366,7 +369,7 @@ pie(Area, label = are, main = "Porcentaje de\n estudiantes en sus respectivos ca
 ```{r}
 summary(enc$Q25_PorcentArea)
 ```
-##Análisis de la variable Porcentaje que respondieron bien la respuesta anterior
+
 
 
 
@@ -378,6 +381,9 @@ summary(enc$Q27_PorcentDivisor)
 
 
 
+```{r}
+rownames(enc$Q03_Carrera)
+```
 
 
 
@@ -385,13 +391,22 @@ summary(enc$Q27_PorcentDivisor)
 
 ## Cruce variable PAPA con Carreras
 #### Se hace una visualización del comportamiento del PAPA con respecto a las carreras registradas en la base de datos, para verificar si tal como pensamos; *¿será los estudiantes de Estadistica por ser semi-primíparos en la universidad tienen un mejor (mayor) PAPA?*
-```{r}
+```{r,fig.width=7.5, fig.height=6}
 boxplot(enc$Q08_PAPA ~ enc$Q03_Carrera, notch= TRUE, col = "lightgreen",
+        par(oma=c(5,0,0,0)),
+        xaxt='n',
         main = "Dispersión de promedios por carreras", las=1,
         ylab = "Promedio Acádemico Ponderado Acumulado",
-        xlab = "Carreras",
-        ylim = c(3,5), las=1)
+        xlab = " ",
+        ylim = c(3,5))
+axis(1,1:7, labels= c("Matemáticas", "Ingeniería de sistemas", "Estadística", "Ingeniería administrativa", "Ingeniería física", "Ingeniería industrial", "Otra"), las=2)
+
+
 ```
+
+
+
+
 Esta pregunta se puede responder claramente con un *No* a nivel general de todos los estudiantes, y al ser comparado con los estudiantes de ingeniería de sistemas, no se puede concluir que grupo tiene el PAPA más elevado.
 
 
@@ -411,16 +426,28 @@ PA_ED<-with(enc, scatter.smooth(x=edad,
 Al observar los datos podemos ver que los promedios mas altos se cocentran en los estudiantes de edades entre *18-22* así que al compararlos con lo que pensabamos; refutamos la idea que teníamos pero no podemos decir que los años y la experiencia no ayudan en la parte académica.  
 
 ##### Presentaremos un gráfico que relacione la edad de los estudiantes con la carrera que cursan, para respondernos la pregunta *¿Los estudiantes de menor edad son los de estadistica?, al ser una asignatura que se ve en primeros semestres de su malla curricular)?*
-```{r}
+```{r,fig.width=7.5, fig.height=6}
 boxplot(enc$edad ~ enc$Q03_Carrera, notch= TRUE,col="lightblue",
-     main = "Comportamiento de la edad deacuerdo a las carrera de los estudiantes", las=1,
-     ylab = "Edades de los estudiantes",
-     xlab = "Carreras  cursadas",
-     ylim = c(17,40), las=1)
+        par(oma=c(6,0,0,0)),
+        xaxt='n',
+        main = "Comportamiento de la edad deacuerdo a las carrera de los estudiantes", las=1,
+        ylab = "Edades de los estudiantes",
+        xlab = " ",
+        ylim = c(17,40), las=1)
+axis(1,1:7, labels= c("Matemáticas", "Ingeniería de sistemas", "Estadística", "Ingeniería administrativa", "Ingeniería física", "Ingeniería industrial", "Otra"), las=2)
 
 ```
 Al traslaparse esta información en particular con el grupo de estudiantes de ingeniería de sistemas; no podemos decir con certeza que *sí* pues aúnque el estudiante más joven es de Estadística; existen intervalos de confianza en el mismo  rango de las edades para estos dos grupos, lo que quiere decir que entre éstos dos, estan los estudiantes más jovenes de la encuesta.
 
+
+#ANÁLISIS MULTIVARIADO
+
+
+Se espera que en la pregunta relacionada con la gráfica, las carreras relacionadas con matemáticas obtengan un mejor puntaje. A la vez queremos analizar si el nivel del semestre influye en contestar correctamente. 
+
+```{r}
+pairs(enc[,c("Q24_area","Q03_Carrera", "Q04_Semestre"  )])
+```
 
 
 .....
