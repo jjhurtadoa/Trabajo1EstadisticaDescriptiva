@@ -1,0 +1,410 @@
+---
+title: "Primer Trabajo Grupal"
+authors:"Omar David Mercado -omercado@unal.edu.co,
+        "Zuleima Carriazo- zcarriazo@unal.edu.co,
+        "ESteban Grajales-jgrajalesh@unal.edu.co,
+        Juan Manuel,Juan Jose Hurtado Alvarez",
+date: "Miercoles 14 de Abril de 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE
+                      )
+```
+
+
+##### Valiendonos de las múltiples opciones que tenemos para presentar este proyecto, hacemos uso de estas bibliotecas en particular
+```{r}
+library(tidyverse)
+library(eeptools)
+```
+
+###### Se realiza la lectura de la base de datos de la que vamos a tomar información para realizar un analisis gráfico/exploratorio de lo que podamos encontrar en ella; se codifica con *UTF-08* para una lectura adecuada que permita tildes y letras en español.
+```{r}
+Enc <- read.csv("encuesta1.csv", encoding = "UTF-8")
+
+```
+
+
+##### Se muestran en el archivo los primeros 6 registros de la base de datos en cuestión, para dar una idea lo que pueda contener  ésta misma.
+```{r}
+head(Enc)
+```
+
+###### Se hace una revisión de las variables contenidas en la base de datos para mirar a que tipo pertenecen, y posteriormente convertirlas a otro para trabajarlas a nuestra conveniencia
+```{r}
+glimpse(Enc)
+```
+```{r}
+summary(Enc)
+```
+
+
+##### Se cambian las variables de tipo caracter a factor sobre una nueva base de datos replicada; para un adecuado manejo de los resultados encontrados en éstas en su análisis descriptivo
+```{r}
+enc <- Enc %>%
+  mutate_if(is.character, as.factor)
+```
+
+##### Como primer depurado; se convierte el asignado de la primera variable **Respuesta** a tipo character, pues se considera que con estas cifras no debemos hacer ningún tipo de cálculo matemático como para dejarla ser *entero*
+
+```{r}
+enc$Respuesta<-factor(enc$Respuesta)
+```
+
+#####Tambien se convierte a tipo factor las variables en lenguaje binario, representando como *Si* al número *1*, para una mayor claridad al público,en la lectura de la base de datos 
+```{r}
+enc$Q09_EnAreaMetropolitana<-factor(enc$Q09_EnAreaMetropolitana, levels=c(0:1), labels=c('No','Si'))
+enc$Q11_R<-factor(enc$Q11_R, levels=c(0:1), labels=c('No','Si'))
+enc$Q12_RStudio<-factor(enc$Q12_RStudio,levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Internet.de.cable.no.propio<-factor(enc$Q14_RecursosInformaticos..Internet.de.cable.no.propio, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Wifi.propio<-factor(enc$Q14_RecursosInformaticos..Wifi.propio, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Wifi.no.propio<-factor(enc$Q14_RecursosInformaticos..Wifi.no.propio,levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Celular.sin.datos<-factor(enc$Q14_RecursosInformaticos..Celular.sin.datos, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Celular.con.datos<-factor(enc$Q14_RecursosInformaticos..Celular.con.datos, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Portátil.propio<-factor(enc$Q14_RecursosInformaticos..Portátil.propio, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Portátil.no.propio<-factor(enc$Q14_RecursosInformaticos..Portátil.no.propio, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Computador.de.escritorio.propio.y.exclusivo<-factor(enc$Q14_RecursosInformaticos..Computador.de.escritorio.propio.y.exclusivo, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Computador.de.escritorio.no.propio.pero.exclusivo<-factor(enc$Q14_RecursosInformaticos..Computador.de.escritorio.no.propio.pero.exclusivo, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Computador.propio..pero.no.exclusivo<-factor(enc$Q14_RecursosInformaticos..Computador.propio..pero.no.exclusivo,levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Computador.de.escritorio.ni.propio.ni.exclusivo<-factor(enc$Q14_RecursosInformaticos..Computador.de.escritorio.ni.propio.ni.exclusivo, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Tablet.sin.datos<-factor(enc$Q14_RecursosInformaticos..Tablet.sin.datos, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Tablet.con.datos.<-factor(enc$Q14_RecursosInformaticos..Tablet.con.datos., levels=c(0:1), labels=c('No','Si')) 
+enc$Q15_Alunizaje<-factor(enc$Q15_Alunizaje, levels=c(0:1), labels=c('No','Si')) 
+enc$Q17_Experimentos<-factor(enc$Q17_Experimentos, levels=c(0:1), labels=c('No','Si'))
+enc$Q16_EspionajeInternet<-factor(enc$Q16_EspionajeInternet, levels=c(0:1), labels=c('No','Si'))
+enc$Q18_Vacunas<-factor(enc$Q18_Vacunas, levels=c(0:1), labels=c('No','Si'))
+enc$Q19_EvidenciaFalsa<-factor(enc$Q19_EvidenciaFalsa, levels=c(0:1), labels=c('No','Si'))
+enc$Q20_RafagasSolares<-factor(enc$Q20_RafagasSolares, levels=c(0:1), labels=c('No','Si'))
+enc$Q21_TierraHueca<-factor(enc$Q21_TierraHueca,  levels=c(0:1), labels=c('No','Si'))
+enc$Q22_alienigenas<-factor(enc$Q22_alienigenas,  levels=c(0:1), labels=c('No','Si'))
+enc$Q23_CambioClimatico<-factor(enc$Q23_CambioClimatico, levels=c(0:1), labels=c('No','Si'))
+enc$Q26_Divisor..f.es.divisor.de.g.2.<-factor(enc$Q26_Divisor..f.es.divisor.de.g.2.,levels=c(0:1), labels=c('No','Si'))
+enc$Q26_Divisor..f.es.divisor.de.gh.<-factor(enc$Q26_Divisor..f.es.divisor.de.gh.,  levels=c(0:1), labels=c('No','Si'))
+enc$Q26_Divisor..f.es.divisor.de.h.g<-factor(enc$Q26_Divisor..f.es.divisor.de.h.g, levels=c(0:1), labels=c('No','Si'))
+enc$Q14_RecursosInformaticos..Internet.de.cable.propio<-factor(enc$Q14_RecursosInformaticos..Internet.de.cable.propio, levels=c(0:1), labels=c('No','Si'))
+```
+
+```{r}
+summary(enc)
+```
+
+```{r}
+glimpse(enc)
+```
+#ANÁLISIS UNIVARIADO
+
+##Análisis de la variable género
+```{r depuración de la variable ** Género**}
+
+gen <- table(enc$Q01_Genero)
+gen
+```
+
+
+```{r}
+paramAnt <- par(no.readonly = TRUE)
+barplot(gen_p, las = 1,
+        main  = "Distribución por género",
+        ylim = c(0,100),
+        col =c ('Black', 'violet', 'cyan'), 
+        legend.text = c('Masculino', 'Femenino', 'Otro'))
+#text(bp1, gen_p + 7, paste(round(gen_p, 1), "%"))
+grid(NA, )
+par(paramAnt)
+```
+
+##Análisis de la variable Fecha de nacimiento
+```{r}
+enc <- enc %>% 
+  mutate(Q02_FechaNac = as.Date(as.character(Q02_FechaNac), "%Y-%m-%d"))
+```
+
+```{r}
+summary(enc$Q02_FechaNac)
+```
+### Como la variable Fecha de Nacimiento no da claridad de los datos para un análisis, realizamos la conversión de la Fecha de nacimiento a Edad
+```{r}
+# Cálculo de la edad
+enc <- enc %>% 
+  mutate(edad = as.numeric(as.Date("2021-06-30") - Q02_FechaNac)/365.25)
+  
+```
+
+
+```{r}
+enc[,"edad"] <- floor(enc[,"edad"])
+enc[,"edad"]
+```
+
+```{r}
+summary(enc$edad)
+```
+##Análisis de la variable Carrera
+#### Una tabla sencilla que muestra la distribución general de resultados de la variable Carrera de la base de datos; dado que existe un nombre único para cada carrera, no se considera que deba ser depurada, se procederá a ver en grafico la cantidad de estudiantes por carrrera.
+```{r}
+Q03<-table(enc$Q03_Carrera)
+Q03
+```
+
+### Se cambian los valores a frecuencia relativa para posteriormente graficar los valores.
+```{r}
+carrera <- Q03 / sum(Q03)*100
+carrera
+```
+
+#### Se realizará una gráfica de barras para representar los datos de los estudiantes y sus respectivas carreras, basandonos en su tabla de frecuencia
+```{r}
+Q03 <- c("Mate", "Estadístic.", "Ing. Física", "Sistemas", "Ing.Admin.", "Industrial.", "Otra")
+Frecuencia<- c(2, 54, 1, 26, 1, 2, 1)
+barplot(Frecuencia, names.arg = Q03, density = 20, las= 2, main= 'Cantidad de estudiantes\n encuestados por carrera', ylim=c(0,60), col= 'cyan')
+abline(h=seq(0,60,1), col= rep('grey', 6), lty=3)
+```
+##Análisis de la variable Semestre
+
+```{r}
+summary(enc$Q04_Semestre)
+```
+```{r}
+Q04 <- table(enc$Q04_Semestre)
+Q04
+```
+##Análisis de la variable Resultados Pruebas Saber 11
+
+```{r}
+summary(enc$Q05_Saber11)
+```
+### Distribución de los puntajes de los estudiantes
+```{r}
+boxplot(enc$Q05_Saber11, main = "Distribución Puntaje Saber 11",
+        outline = FALSE)
+```
+##Análisis de la variable Percentil Pruebas Saber 11
+
+```{r}
+summary(enc$Q06_PercentilSaber11)
+```
+### Distribución de los percentiles prueba de los estudiantes
+```{r}
+boxplot(enc$Q06_PercentilSaber11, main = "Distribución Percentil Pruebas Saber 11",
+        outline = FALSE)
+```
+##Análisis de la variable Fecha Pruebas Saber 11
+
+```{r}
+enc <- enc %>% 
+  mutate(Q07_FechaSaber11 = as.Date(as.character(Q07_FechaSaber11), "%Y-%m-%d"))
+```
+
+```{r}
+summary(enc$Q07_FechaSaber11)
+```
+##Análisis de la variable Fecha Pruebas Saber 11
+###  Se toma la decisión de omitir los datos en NA ya que no hacen una gran representacion y se filtra la fila en donde la variable *Q08_PAPA* presenta un error atípico y para tomar la decisión de corregir el dato, pues consideramos que pudo deberse a un error en la digitación de éste
+```{r depuracion de la variable Q08_PAPA y analisis descriptivo}
+enc %>%
+  filter(Q08_PAPA > 5)
+```
+
+
+```{r}
+enc$Q08_PAPA[enc$Q08_PAPA == 45 & !is.na(enc$Q08_PAPA)] <- 4.5
+```
+
+
+```{r}
+summary(enc$Q08_PAPA)
+```
+
+
+```{r}
+boxplot(enc$Q08_PAPA,main = "Distribución PAPA",
+        outline = FALSE)
+```
+```{r}
+bxp1<-boxplot(enc$Q08_PAPA, horizontal = TRUE,  notch= TRUE, col= 'violet')
+title(main= 'Distribución_PAPA', 
+      outline = FALSE, 
+      font=2, 
+      xlab='Promedio Academico Ponderado Acumulado')
+points(mean(enc$Q08_PAPA, na.rm=FALSE),1, col=' green', pch=19, cex=2)
+legend(4.2,1.5, legend=c('Promedio'), pch=19, col= 'green')
+```
+
+##Análisis de la variable Reside en el Área Metropolitana
+```{r}
+summary(enc$Q09_EnAreaMetropolitana)
+```
+
+```{r}
+barplot(table(enc$Q09_EnAreaMetropolitana))
+```
+
+##Análisis de la variable Estrato
+```{r}
+summary(enc$Q10_Estrato)
+```
+
+##Análisis de la variable Tiene o no Tiene R
+```{r}
+summary(enc$Q11_R)
+```
+
+```{r}
+barplot(table(enc$Q11_R))
+```
+##Análisis de la variable Tiene o no Tiene R Studio
+```{r}
+summary(enc$Q12_RStudio)
+```
+
+```{r}
+barplot(table(enc$Q12_RStudio))
+```
+
+### Se omite la Pregunta 13 ya que esta son justificaciones del encuestado.
+
+##Análisis de la variable Recursos Informaticos
+Falta
+
+
+
+##Análisis de la variable Alunizaje ¿Cree que el hombre en realidad llegó a la Luna?
+```{r}
+summary(enc$Q15_Alunizaje)
+```
+```{r}
+barplot(table(enc$Q15_Alunizaje))
+```
+##Análisis de la variable Espionaje por Internet ¿Cree en el Espionaje a traves del Internet?
+```{r}
+summary(enc$Q16_EspionajeInternet)
+```
+```{r}
+barplot(table(enc$Q16_EspionajeInternet))
+```
+
+##Análisis de la variable Experimentos ¿Se realizaron experimento en personas afroamericanas en donde no se suministró la penicilina a enfermos con sífilis?
+```{r}
+summary(enc$Q17_Experimentos)
+```
+```{r}
+barplot(table(enc$Q17_Experimentos))
+```
+
+##Análisis de la variable Vacunas ¿Las vacunas no sirven y son una conspiración de las multinacionales farmacéuticas para enriquecers?
+```{r}
+summary(enc$Q18_Vacunas)
+```
+```{r}
+barplot(table(enc$Q18_Vacunas))
+```
+
+##Análisis de la variable Evidencia Falsa ¿Se utilizó evidencia falsa por el FBI para condenar personas inocentes durante el siglo pasado en EEUU?
+```{r}
+summary(enc$Q19_EvidenciaFalsa)
+```
+```{r}
+barplot(table(enc$Q19_EvidenciaFalsa))
+```
+
+
+##Análisis de la variable Rafaga Solares ¿Las ráfagas solares causan los sismos en la tierra?
+
+```{r}
+summary(enc$Q20_RafagasSolares)
+```
+```{r}
+barplot(table(enc$Q20_RafagasSolares))
+```
+
+##Análisis de la variable Tierra Hueca ¿La tierra es hueca y en su interior existe una civilización oculta?
+
+```{r}
+summary(enc$Q21_TierraHueca)
+```
+```{r}
+barplot(table(enc$Q21_TierraHueca))
+```
+
+##Análisis de la variable Alienigenas ¿Los alienígenas visitaron las civilizaciones antiguas, influyeron en sus historia y construyeron los mega monumentos de la antigüedad?
+
+```{r}
+summary(enc$Q22_alienigenas)
+```
+```{r}
+barplot(table(enc$Q22_alienigenas))
+```
+
+##Análisis de la variable Cambio Climatico ¿Los efectos del cambio climático son naturales, y el escándalo se debe a conspiraciones de ambientalistas y de ciertos gremios económicos?
+
+```{r}
+summary(enc$Q23_CambioClimatico)
+```
+```{r}
+barplot(table(enc$Q23_CambioClimatico))
+```
+##Análisis de la variable área
+
+```{r}
+summary(enc$Q24_area)
+```
+### Cambio de la variable área Frecuencia relativa para hacer un análisis posteriormente.
+```{r} 
+are <- Area / sum(Area)*100
+are
+```
+### Se presentará en un grafico de pastel el porcentaje de estudiantes que seleccionaron cada una de las posibles opciones de respuesta a la pregunta sobre área sombreada de una circunferencia
+```{r}
+are<-c("7.5pi  3.4%", "6pi  10.3%", "4.5pi  15%", "4pi  44.9%", "3pi  5.8%","Ninguna de\n las anteriores  20.7%")
+pie(Area, label = are, main = "Porcentaje de\n estudiantes en sus respectivos calculos del área ")
+```
+
+
+##Análisis de la variable Porcentaje que respondieron bien la respuesta anterior
+
+```{r}
+summary(enc$Q25_PorcentArea)
+```
+##Análisis de la variable Porcentaje que respondieron bien la respuesta anterior
+
+
+
+##Análisis de la variable Porcentaje que respondieron bien de los Divisores
+
+```{r}
+summary(enc$Q27_PorcentDivisor)
+```
+
+
+
+
+
+
+#ANÁLISIS BIVARIADO
+
+## Cruce variable PAPA con Carreras
+#### Se hace una visualización del comportamiento del PAPA con respecto a las carreras registradas en la base de datos, para verificar si tal como pensamos los estudiantes de Estadistica por ser semi-primíparos en la universidad tienen un mayor PAPA.
+```{r}
+boxplot(enc$Q08_PAPA ~ enc$Q03_Carrera, col = "lightblue",
+        main = "Dispersión de promedios por carreras", las=1,
+        ylab = "Promedio Acádemico Ponderado Acumulado",
+        xlab = "Carreras",
+        #xlim = c(15,45),
+        ylim = c(0,5), las=1)
+```
+## CRUCE PAPA CON EDAD
+######  Se representará por medio de un gráfico de dispersión el comportamiento de PAPA deacuerdo a la edad de los estudiantes, para reforzar o refutar la idea de que a mayor edad, mejor será el promedio académico ya que se cuenta con más experiencia, y por ende mejores métodos de aprendizaje adquiridos a lo largo de los años; o por el contrario, a mayor edad, mayor compromiso y responsabilidad y poco tiempo para dedicarle a las asigaturas.. ¡Veamoslo!
+```{r}
+plot(enc$Q08_PAPA, enc$edad, 
+     main = "Dispersión de promedios por edades", las=1,
+     ylab = "Promedio Acádemico Ponderado Acumulado",
+     xlab = "Edades",
+     xlim = c(15,45),
+     ylim = c(0,5), las=1)
+lines(enc$Q08_PAPA)
+abline(h = mean(enc$Q08_PAPA), col = "red")
+```
