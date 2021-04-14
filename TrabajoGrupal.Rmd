@@ -381,9 +381,7 @@ summary(enc$Q27_PorcentDivisor)
 
 
 
-```{r}
-rownames(enc$Q03_Carrera)
-```
+
 
 
 
@@ -444,9 +442,29 @@ Al traslaparse esta información en particular con el grupo de estudiantes de in
 
 
 Se espera que en la pregunta relacionada con la gráfica, las carreras relacionadas con matemáticas obtengan un mejor puntaje. A la vez queremos analizar si el nivel del semestre influye en contestar correctamente. 
+```{r}
+(enc$Q24_area)
+```
+```{r}
+
+```
+
+
 
 ```{r}
-pairs(enc[,c("Q24_area","Q03_Carrera", "Q04_Semestre"  )])
+myColors <- ifelse(levels(enc$Q24_area)=="4 : 4*pi", "blue" ,
+                  "red" )
+```
+
+
+```{r,fig.width=7.5, fig.height=6}
+plot(x=enc$Q04_Semestre, y=enc$Q03_Carrera,
+     "p",
+     xlab="Semestre",ylab=" ",
+     col= myColors)
+axis(2,1:7, labels= c("Matemáticas", "Ingeniería de sistemas", "Estadística", "Ingeniería administrativa", "Ingeniería física", "Ingeniería industrial", "Otra"), las=2)
+
+
 ```
 
 
