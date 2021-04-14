@@ -97,7 +97,7 @@ glimpse(enc)
 ```
 #ANÁLISIS UNIVARIADO
 
-##Análisis de la variable género
+##### Análisis de la variable género
 ```{r depuración de la variable ** Género**}
 
 gen <- table(enc$Q01_Genero)
@@ -107,13 +107,13 @@ gen
 
 ```{r}
 paramAnt <- par(no.readonly = TRUE)
-barplot(gen_p, las = 1,
+barplot(gen, las = 1,
         main  = "Distribución por género",
-        ylim = c(0,100),
-        col =c ('Black', 'violet', 'cyan'), 
-        legend.text = c('Masculino', 'Femenino', 'Otro'))
-#text(bp1, gen_p + 7, paste(round(gen_p, 1), "%"))
-grid(NA, )
+        ylim = c(0,80),
+        col ='black') 
+       # legend.text = c('Masculino', 'Femenino', 'Otro'))
+#text(enc, gen + 7, paste(round(gen, 1), "%"))
+grid(NA, 10)
 par(paramAnt)
 ```
 
@@ -134,6 +134,11 @@ enc <- enc %>%
   
 ```
 
+```{r}
+ed<- table(enc$edad)
+ed
+```
+
 
 ```{r}
 enc[,"edad"] <- floor(enc[,"edad"])
@@ -150,7 +155,7 @@ Q03<-table(enc$Q03_Carrera)
 Q03
 ```
 
-### Se cambian los valores a frecuencia relativa para posteriormente graficar los valores.
+### Se cambian los valores a frecuencia relativa para posteriormente ser graficados.
 ```{r}
 carrera <- Q03 / sum(Q03)*100
 carrera
@@ -164,7 +169,6 @@ barplot(Frecuencia, names.arg = Q03, density = 20, las= 2, main= 'Cantidad de es
 abline(h=seq(0,60,1), col= rep('grey', 6), lty=3)
 ```
 ##Análisis de la variable Semestre
-
 ```{r}
 summary(enc$Q04_Semestre)
 ```
@@ -172,6 +176,7 @@ summary(enc$Q04_Semestre)
 Q04 <- table(enc$Q04_Semestre)
 Q04
 ```
+
 ##Análisis de la variable Resultados Pruebas Saber 11
 
 ```{r}
@@ -179,7 +184,7 @@ summary(enc$Q05_Saber11)
 ```
 ### Distribución de los puntajes de los estudiantes
 ```{r}
-boxplot(enc$Q05_Saber11, main = "Distribución Puntaje Saber 11",
+boxplot(enc$Q05_Saber11, main = "Distribución Puntaje Saber 11", notch= TRUE,
         outline = FALSE)
 ```
 ##Análisis de la variable Percentil Pruebas Saber 11
@@ -189,7 +194,7 @@ summary(enc$Q06_PercentilSaber11)
 ```
 ### Distribución de los percentiles prueba de los estudiantes
 ```{r}
-boxplot(enc$Q06_PercentilSaber11, main = "Distribución Percentil Pruebas Saber 11",
+boxplot(enc$Q06_PercentilSaber11, main = "Distribución Percentil Pruebas Saber 11", notch= TRUE,
         outline = FALSE)
 ```
 ##Análisis de la variable Fecha Pruebas Saber 11
@@ -220,27 +225,20 @@ summary(enc$Q08_PAPA)
 ```
 
 
+
 ```{r}
-boxplot(enc$Q08_PAPA,main = "Distribución PAPA",
-        outline = FALSE)
-```
-```{r}
-bxp1<-boxplot(enc$Q08_PAPA, horizontal = TRUE,  notch= TRUE, col= 'violet')
+bxp1<-boxplot(enc$Q08_PAPA, horizontal = TRUE,  notch= TRUE, col= 'gold')
 title(main= 'Distribución_PAPA', 
       outline = FALSE, 
       font=2, 
       xlab='Promedio Academico Ponderado Acumulado')
 points(mean(enc$Q08_PAPA, na.rm=FALSE),1, col=' green', pch=19, cex=2)
-legend(4.2,1.5, legend=c('Promedio'), pch=19, col= 'green')
+legend(4.2,1.5, legend=c('Promedio'), pch=19, col= 'red')
 ```
 
 ##Análisis de la variable Reside en el Área Metropolitana
 ```{r}
 summary(enc$Q09_EnAreaMetropolitana)
-```
-
-```{r}
-barplot(table(enc$Q09_EnAreaMetropolitana))
 ```
 
 ##Análisis de la variable Estrato
@@ -253,21 +251,22 @@ summary(enc$Q10_Estrato)
 summary(enc$Q11_R)
 ```
 
-```{r}
-barplot(table(enc$Q11_R))
-```
+
 ##Análisis de la variable Tiene o no Tiene R Studio
 ```{r}
 summary(enc$Q12_RStudio)
 ```
-
-```{r}
-barplot(table(enc$Q12_RStudio))
-```
-
 ### Se omite la Pregunta 13 ya que esta son justificaciones del encuestado.
 
 ##Análisis de la variable Recursos Informaticos
+```{r}
+summary(enc$Q14_RecursosInformaticos..Internet.de.cable.propio)
+```
+
+
+
+
+
 Falta
 
 
@@ -344,9 +343,7 @@ barplot(table(enc$Q22_alienigenas))
 ```{r}
 summary(enc$Q23_CambioClimatico)
 ```
-```{r}
-barplot(table(enc$Q23_CambioClimatico))
-```
+
 ##Análisis de la variable área
 
 ```{r}
@@ -387,24 +384,50 @@ summary(enc$Q27_PorcentDivisor)
 #ANÁLISIS BIVARIADO
 
 ## Cruce variable PAPA con Carreras
-#### Se hace una visualización del comportamiento del PAPA con respecto a las carreras registradas en la base de datos, para verificar si tal como pensamos los estudiantes de Estadistica por ser semi-primíparos en la universidad tienen un mayor PAPA.
+#### Se hace una visualización del comportamiento del PAPA con respecto a las carreras registradas en la base de datos, para verificar si tal como pensamos; *¿será los estudiantes de Estadistica por ser semi-primíparos en la universidad tienen un mejor (mayor) PAPA?*
 ```{r}
-boxplot(enc$Q08_PAPA ~ enc$Q03_Carrera, col = "lightblue",
+boxplot(enc$Q08_PAPA ~ enc$Q03_Carrera, notch= TRUE, col = "lightblue",
         main = "Dispersión de promedios por carreras", las=1,
         ylab = "Promedio Acádemico Ponderado Acumulado",
         xlab = "Carreras",
-        #xlim = c(15,45),
-        ylim = c(0,5), las=1)
+        ylim = c(3,5), las=1)
 ```
+Esta pregunta se puede responder claramente con un *No* a nivel general de todos los estudiantes, y al ser comparado con los estudiantes de ingeniería de sistemas, no se puede concluir que grupo tiene el PAPA más elevado.
+
+
 ## CRUCE PAPA CON EDAD
-######  Se representará por medio de un gráfico de dispersión el comportamiento de PAPA deacuerdo a la edad de los estudiantes, para reforzar o refutar la idea de que a mayor edad, mejor será el promedio académico ya que se cuenta con más experiencia, y por ende mejores métodos de aprendizaje adquiridos a lo largo de los años; o por el contrario, a mayor edad, mayor compromiso y responsabilidad y poco tiempo para dedicarle a las asigaturas.. ¡Veamoslo!
+######  Se representará por medio de un gráfico de dispersión el comportamiento de PAPA deacuerdo a la edad de los estudiantes, para reforzar o refutar la idea de que *¿A mayor edad, mejor será el promedio académico ya que se cuenta con más experiencia, y por ende mejores métodos de aprendizaje adquiridos a lo largo de los años; o por el contrario, a mayor edad, mayor compromiso y responsabilidad y poco tiempo para dedicarle a las asigaturas..?* ¡Veamoslo!
 ```{r}
 plot(enc$Q08_PAPA, enc$edad, 
      main = "Dispersión de promedios por edades", las=1,
      ylab = "Promedio Acádemico Ponderado Acumulado",
      xlab = "Edades",
-     xlim = c(15,45),
-     ylim = c(0,5), las=1)
+     xlim = c(17,38),
+     ylim = c(3,5), las=1)
 lines(enc$Q08_PAPA)
 abline(h = mean(enc$Q08_PAPA), col = "red")
 ```
+Al revisar los datos y compararlos con lo que pensabamos; refutamos la idea pues es visible que el Promedio académico no esta en función de la edad de los estudiantes; y se puede decir que en ella no existe nigún patrón de interés que responda estas preguntas
+
+
+
+##### Presentaremos un gráfico que relacione la edad de los estudiantes con la carrera que cursan, para respondernos la pregunta *¿Los estudiantes de menor edad son los de estadistica?, al ser una asignatura que se ve en primeros semestres de su malla curricular)?*
+```{r}
+boxplot(enc$edad ~ enc$Q03_Carrera, notch= TRUE,col="cyan",
+     main = "Comportamiento de la edad deacuerdo a las carrera de los estudiantes", las=1,
+     ylab = "Edades de los estudiantes",
+     xlab = "Carreras que  cursan",
+     ylim = c(17,40), las=1)
+
+```
+Al traslaparse esta información en particular con el grupo de estudiantes de ingeniería de sistemas; no podemos decir con certeza que *sí* pues aúnque el estudiante más joven es de Estadística; existen intervalos de confianza en el mismo  rango de las edades para estos dos grupos, lo que quiere decir que entre éstos dos, estan los estudiantes más jovenes de la encuesta.
+
+
+
+
+
+## RECOMENDACIONES
+1. Para la tabla de datos debería omitirse de ella la primera variable que asigna un número aleoatorio a cada fila puesto que no representa importancia significativa dentro de ésta.
+
+## CONCLUSIONES
+Podemos ver que la universidad como es de carácter público la mayoría de sus estudiantes son de estrato 1, 2, y 3   medianamente, por lo cual es escaso encontrar estudiantes con estratos elevados .
