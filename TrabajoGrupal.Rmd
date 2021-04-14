@@ -1,6 +1,6 @@
 ---
 title: "Primer Trabajo Grupal"
-author: "Omar David Mercado -omercado@unal.edu.co <br> Zuleima Carriazo- zcarriazo@unal.edu.co <br> ESteban Grajales-jgrajalesh@unal.edu.co <br> Juan José Hurtado- jjhurtadoa@unal.edu.co <br> Juan manuel "
+author: "Omar David Mercado -omercado@unal.edu.co <br> Zuleima Carriazo- zcarriazo@unal.edu.co <br> ESteban Grajales-jgrajalesh@unal.edu.co <br> Juan José Hurtado- jjhurtadoa@unal.edu.co <br> Juan Manuel Sierra- jmsierraa@unal.edu.co "
 date: "Miercoles 14 de Abril de 2021"
 output: html_document
 ---
@@ -52,7 +52,7 @@ enc <- Enc %>%
 enc$Respuesta<-factor(enc$Respuesta)
 ```
 
-#####Tambien se convierte a tipo factor las variables en lenguaje binario, representando como *Si* al número *1*, para una mayor claridad al público,en la lectura de la base de datos 
+##### Tambien se convierte a tipo factor las variables en lenguaje binario, representando como *Si* al número *1*, para una mayor claridad al público,en la lectura de la base de datos 
 ```{r}
 enc$Q09_EnAreaMetropolitana<-factor(enc$Q09_EnAreaMetropolitana, levels=c(0:1), labels=c('No','Si'))
 enc$Q11_R<-factor(enc$Q11_R, levels=c(0:1), labels=c('No','Si'))
@@ -494,16 +494,14 @@ summary( enc_area_desacertada$Q04_Semestre )
 Partiendo del hecho que las carreras con más personas son ingeniería de sistemas y estadística, podemos que mientras ing de sistemas está equilibrado entre estudiantes que acertaron y fallaron, estadística se inclina un poco más a fallar. Esto tal vez se deba a que gran parte de los estudiantes de estadística son de primeros semestres, donde sí hay una clara tendencia de más fallo en la respuesta a la pregunta
 
 
-##Analisís multivariado, Semestre, carrera, y si tiene instalado el Rstudio
+## Analisís multivariado, Semestre, carrera, y si tiene instalado el Rstudio
 
 Nos preguntamos si los estudiantes que tenían instalado Rstudio al momento de la encuesta son en su mayoría estudiantes de estadística o en su defecto de semestres avanzados
 
-```{r}
-enc$Q12_RStudio
-```
 
 
-###Gráfica de puntos, el color rojo indica que el estudiante tenía instalado Rstudio, el color azul que no
+
+### Gráfica de puntos, el color rojo indica que el estudiante tenía instalado Rstudio, el color azul que no
 
 
 ```{r,fig.width=7.5, fig.height=6}
@@ -583,7 +581,7 @@ Nos preguntamos en  los estudiantes que creen que los alienígenas ayudaron civi
  par(oma=c(0,8,0,0))
  plot(enc$edad, enc$Q04_Semestre, notch=TRUE,
      "p",
-     xlab="Edad",ylab=" ",
+     xlab="Edad",ylab="Semestre ",
      
      pch= 19,
      col= ifelse(enc$Q22_alienigenas == "Si", "red", "blue"),
@@ -596,10 +594,10 @@ Nos preguntamos en  los estudiantes que creen que los alienígenas ayudaron civi
 
 ```{r}
 enc_alien <- enc %>%
-  filter(enc$Q22_alienigenas =="Si")
 
 enc_alien_no <- enc %>%
   filter(enc$Q22_alienigenas !="Si")
+  filter(enc$Q22_alienigenas =="Si")
 
 
 
@@ -699,7 +697,7 @@ Ahora nos interesa saber si teniendo en cuenta la edad, el estrato influye en el
  par(oma=c(0,8,0,0))
  plot(enc$edad, enc$Q10_Estrato, notch=TRUE,
      "p",
-     xlab="Edad",ylab=" ",
+     xlab="Edad",ylab="Estrato ",
      
      pch= 19,
      col= ifelse(enc$Q08_PAPA < 3.8, "red", ifelse(enc$Q08_PAPA < 4.042, "darkgoldenrod1", ifelse(enc$Q08_PAPA < 4.3, "forestgreen", "blue"))),
