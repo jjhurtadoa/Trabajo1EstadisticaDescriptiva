@@ -386,7 +386,7 @@ summary(enc$Q27_PorcentDivisor)
 ## Cruce variable PAPA con Carreras
 #### Se hace una visualización del comportamiento del PAPA con respecto a las carreras registradas en la base de datos, para verificar si tal como pensamos; *¿será los estudiantes de Estadistica por ser semi-primíparos en la universidad tienen un mejor (mayor) PAPA?*
 ```{r}
-boxplot(enc$Q08_PAPA ~ enc$Q03_Carrera, notch= TRUE, col = "lightblue",
+boxplot(enc$Q08_PAPA ~ enc$Q03_Carrera, notch= TRUE, col = "lightgreen",
         main = "Dispersión de promedios por carreras", las=1,
         ylab = "Promedio Acádemico Ponderado Acumulado",
         xlab = "Carreras",
@@ -396,33 +396,34 @@ Esta pregunta se puede responder claramente con un *No* a nivel general de todos
 
 
 ## CRUCE PAPA CON EDAD
-######  Se representará por medio de un gráfico de dispersión el comportamiento de PAPA deacuerdo a la edad de los estudiantes, para reforzar o refutar la idea de que *¿A mayor edad, mejor será el promedio académico ya que se cuenta con más experiencia, y por ende mejores métodos de aprendizaje adquiridos a lo largo de los años; o por el contrario, a mayor edad, mayor compromiso y responsabilidad y poco tiempo para dedicarle a las asigaturas..?* ¡Veamoslo!
+######  Se representará por medio de un gráfico de dispersión el comportamiento de PAPA deacuerdo a la edad de los estudiantes, para reforzar o refutar la idea de que *¿A mayor edad, mejor será el promedio académico ya que se cuenta con más experiencia, y por ende mejores métodos de aprendizaje adquiridos a lo largo de sus años?* ¡Veamoslo!
+
 ```{r}
-plot(enc$Q08_PAPA, enc$edad, 
-     main = "Dispersión de promedios por edades", las=1,
-     ylab = "Promedio Acádemico Ponderado Acumulado",
-     xlab = "Edades",
-     xlim = c(17,38),
-     ylim = c(3,5), las=1)
-lines(enc$Q08_PAPA)
-abline(h = mean(enc$Q08_PAPA), col = "red")
+PA_ED<-with(enc, scatter.smooth(x=edad, 
+                                y= Q08_PAPA,
+                                main= 'Dispersión de promedios por edades',
+                                ylim=c(3,5),
+                                xlim=c(16,38),
+                                ylab = 'Promedio Académico Ponderado Acumulado',
+                                xlab='Edad de los estudiantes', pch=17, col='blue'))
+                                
 ```
-Al revisar los datos y compararlos con lo que pensabamos; refutamos la idea pues es visible que el Promedio académico no esta en función de la edad de los estudiantes; y se puede decir que en ella no existe nigún patrón de interés que responda estas preguntas
-
-
+Al observar los datos podemos ver que los promedios mas altos se cocentran en los estudiantes de edades entre *18-22* así que al compararlos con lo que pensabamos; refutamos la idea que teníamos pero no podemos decir que los años y la experiencia no ayudan en la parte académica.  
 
 ##### Presentaremos un gráfico que relacione la edad de los estudiantes con la carrera que cursan, para respondernos la pregunta *¿Los estudiantes de menor edad son los de estadistica?, al ser una asignatura que se ve en primeros semestres de su malla curricular)?*
 ```{r}
-boxplot(enc$edad ~ enc$Q03_Carrera, notch= TRUE,col="cyan",
+boxplot(enc$edad ~ enc$Q03_Carrera, notch= TRUE,col="lightblue",
      main = "Comportamiento de la edad deacuerdo a las carrera de los estudiantes", las=1,
      ylab = "Edades de los estudiantes",
-     xlab = "Carreras que  cursan",
+     xlab = "Carreras  cursadas",
      ylim = c(17,40), las=1)
 
 ```
 Al traslaparse esta información en particular con el grupo de estudiantes de ingeniería de sistemas; no podemos decir con certeza que *sí* pues aúnque el estudiante más joven es de Estadística; existen intervalos de confianza en el mismo  rango de las edades para estos dos grupos, lo que quiere decir que entre éstos dos, estan los estudiantes más jovenes de la encuesta.
 
 
+
+.....
 
 
 
