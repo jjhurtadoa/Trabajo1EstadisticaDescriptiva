@@ -193,7 +193,7 @@ enc$Q05_Saber11[enc$Q05_Saber11 == 580 & !is.na(enc$Q06_PercentilSaber11)] <- 58
 
 ### Distribución de los puntajes de los estudiantes
 ```{r}
-boxplot(enc$Q05_Saber11, main = "Distribución Puntaje Saber 11", notch= TRUE,
+boxplot(enc$Q05_Saber11, main = "Distribución Puntaje Saber 11", notch= TRUE, col= 'gold' ,
         outline = FALSE)
 ```
 ## Análisis de la variable Percentil Pruebas Saber 11
@@ -218,7 +218,7 @@ summary(enc$Q06_PercentilSaber11)
 
 ### Distribución de los percentiles prueba de los estudiantes
 ```{r}
-boxplot(enc$Q06_PercentilSaber11, main = "Distribución Percentil Pruebas Saber 11", notch= TRUE,
+boxplot(enc$Q06_PercentilSaber11, main = "Distribución Percentil Pruebas Saber 11", notch= TRUE, col= 'gold' ,
         outline = FALSE)
 ```
 ## Análisis de la variable Fecha Pruebas Saber 11
@@ -248,17 +248,17 @@ enc$Q08_PAPA[enc$Q08_PAPA == 45 & !is.na(enc$Q08_PAPA)] <- 4.5
 summary(enc$Q08_PAPA)
 ```
 
-
-
 ```{r}
-bxp1<-boxplot(enc$Q08_PAPA, horizontal = TRUE,  notch= TRUE, col= 'gold')
-title(main= 'Distribución_PAPA', 
-      outline = FALSE, 
+boxplot(enc$Q08_PAPA,  notch= TRUE, col= 'gold',
+main= 'Distribución_PAPA', 
       font=2, 
-      xlab='Promedio Academico Ponderado Acumulado')
-points(mean(enc$Q08_PAPA, na.rm=FALSE),1, col=' green', pch=19, cex=2)
-legend(4.2,1.5, legend=c('Promedio'), pch=19, col= 'red')
+      xlab='Promedio Academico Ponderado Acumulado',
+ylim=c(3,5))
+
 ```
+##### Se puede ver que en general los estudiantes de la encuesta manejan un buen promedio académico, con una media de aprox. 4.2 y con algunos estudiantes que muestran diferencias significativas en comparación.
+
+#### Para las siguientes variables consideramos no necesario realizar un gráfico que detalle sus resusltados pues, con una sencilla suma del acumulo de sus respuestas positivas y negativas bastará para hacer comprender los datos al público.
 
 ## Análisis de la variable Reside en el Área Metropolitana
 ```{r}
@@ -445,7 +445,7 @@ are
 are<-c("7.5pi  3.4%", "6pi  10.3%", "4.5pi  15%", "4pi  44.9%", "3pi  5.8%","Ninguna de\n las anteriores  20.7%")
 pie(Area, label = are, main = "Porcentaje de\n estudiantes en sus respectivos calculos del área ")
 ```
-
+#### Se esperaba que al ser todos de carreras relacionadas con matemáticas, supieramos responder correctamente esta pregunta basíca pero surgen factores que hacen variar los resultados esperados
 
 ## Análisis de la variable Porcentaje que respondieron bien la respuesta anterior
 
@@ -486,7 +486,7 @@ axis(1,1:7, labels= c("Matemáticas", "Ingeniería de sistemas", "Estadística",
 ```
 
 
-Esta pregunta se puede responder claramente con un *No* a nivel general de todos los estudiantes, y al ser comparado con los estudiantes de ingeniería de sistemas, no se puede concluir que grupo tiene el PAPA más elevado.
+#### Esta pregunta se puede responder claramente con un *No* a nivel general de todos los estudiantes, y al ser comparado con los estudiantes de ingeniería de sistemas, no se puede concluir que grupo tiene el PAPA más elevado.
 
 
 ## CRUCE PAPA CON EDAD
@@ -502,7 +502,7 @@ PA_ED<-with(enc, scatter.smooth(x=edad,
                                 xlab='Edad de los estudiantes', pch=17, col='blue'))
                                 
 ```
-Al observar los datos podemos ver que los promedios mas altos se cocentran en los estudiantes de edades entre *18-22* así que al compararlos con lo que pensabamos; refutamos la idea que teníamos pero no podemos decir que los años y la experiencia no ayudan en la parte académica.  
+#### Al observar los datos podemos ver que los promedios mas altos se cocentran en los estudiantes de edades entre *18-22* así que al compararlos con lo que pensabamos; refutamos la idea que teníamos pero no podemos decir que los años y la experiencia no ayudan en la parte académica.  
 
 ##### Presentaremos un gráfico que relacione la edad de los estudiantes con la carrera que cursan, para respondernos la pregunta *¿Los estudiantes de menor edad son los de estadistica?, al ser una asignatura que se ve en primeros semestres de su malla curricular)?*
 ```{r,fig.width=7.5, fig.height=6}
@@ -516,13 +516,13 @@ boxplot(enc$edad ~ enc$Q03_Carrera, notch= TRUE,col="lightblue",
 axis(1,1:7, labels= c("Matemáticas", "Ingeniería de sistemas", "Estadística", "Ingeniería administrativa", "Ingeniería física", "Ingeniería industrial", "Otra"), las=2)
 
 ```
-Al traslaparse esta información en particular con el grupo de estudiantes de ingeniería de sistemas; no podemos decir con certeza que *sí* pues aúnque el estudiante más joven es de Estadística; existen intervalos de confianza en el mismo  rango de las edades para estos dos grupos, lo que quiere decir que entre éstos dos, estan los estudiantes más jovenes de la encuesta.
+#### Al traslaparse esta información en particular con el grupo de estudiantes de ingeniería de sistemas; no podemos decir con certeza que *sí* pues aúnque el estudiante más joven es de Estadística; existen intervalos de confianza en el mismo  rango de las edades para estos dos grupos, lo que quiere decir que entre éstos dos, estan los estudiantes más jovenes de la encuesta.
 
 
 # ANÁLISIS MULTIVARIADO
 
 
-Se espera que en la pregunta relacionada con la gráfica, las carreras relacionadas con matemáticas obtengan un mejor puntaje. A la vez queremos analizar si el nivel del semestre influye en contestar correctamente. 
+#### Se espera que en la pregunta relacionada con la gráfica, las carreras relacionadas con matemáticas obtengan un mejor puntaje. A la vez queremos analizar si el nivel del semestre influye en contestar correctamente. 
 
 
 
@@ -544,6 +544,8 @@ axis(2,1:7, labels= c("Matemáticas", "Ingeniería de sistemas", "Estadística",
 
 
 ```
+#### Podemos darnos cuenta de que los estudiantes que estan empezando en la carrera de estadistica no acertaron a la respuesta del area sombreada, mientras que los estudiantes de semestres mas avanzados acertaron más.
+
 ```{r}
 enc_area_acertada <- enc %>%
   filter(enc$Q24_area =="4 : 4*pi")
@@ -575,12 +577,12 @@ summary( enc_area_acertada$Q04_Semestre )
 ```{r}
 summary( enc_area_desacertada$Q04_Semestre )
 ```
-Partiendo del hecho que las carreras con más personas son ingeniería de sistemas y estadística, podemos que mientras ing de sistemas está equilibrado entre estudiantes que acertaron y fallaron, estadística se inclina un poco más a fallar. Esto tal vez se deba a que gran parte de los estudiantes de estadística son de primeros semestres, donde sí hay una clara tendencia de más fallo en la respuesta a la pregunta
+#### Partiendo del hecho que las carreras con más personas son ingeniería de sistemas y estadística, podemos que mientras ing de sistemas está equilibrado entre estudiantes que acertaron y fallaron, estadística se inclina un poco más a fallar. Esto tal vez se deba a que gran parte de los estudiantes de estadística son de primeros semestres, donde sí hay una clara tendencia de más fallo en la respuesta a la pregunta
 
 
 ## Analisís multivariado, Semestre, carrera, y si tiene instalado el Rstudio
 
-Nos preguntamos si los estudiantes que tenían instalado Rstudio al momento de la encuesta son en su mayoría estudiantes de estadística o en su defecto de semestres avanzados
+#### Nos preguntamos si los estudiantes que tenían instalado Rstudio al momento de la encuesta son en su mayoría estudiantes de estadística o en su defecto de semestres avanzados
 
 
 
@@ -602,7 +604,7 @@ axis(2,1:7, labels= c("Matemáticas", "Ingeniería de sistemas", "Estadística",
 
 
 ```
-
+#### Se nota que es muy bajita las personas que no tenían Rstudio instalado al comienzo del semestre.
 
 
 ```{r}
@@ -611,9 +613,6 @@ enc_RStudio <- enc %>%
 
 enc_RStudio_no <- enc %>%
   filter(enc$Q12_RStudio !="Si")
-
-
-
 ```
 
 ### Análisis numérico de los estudiantes que tenían Rstudio instalado pregunta según la carrera
@@ -647,12 +646,12 @@ summary( enc_RStudio$Q04_Semestre )
 summary( enc_RStudio_no$Q04_Semestre )
 ```
 
-Los estudiantes que no tenían instalado Rstudio marcan  tendencia de ser de semestres tempraneros, y vemos que siendo 11, 10 de estos son de estadística, lo que nos indica que los estudiantes de estadística en gran parte están cursando los primeros semestres y apenas están entrando en el mundo de la programación
+#### Los estudiantes que no tenían instalado Rstudio marcan  tendencia de ser de semestres tempraneros, y vemos que siendo 11, 10 de estos son de estadística, lo que nos indica que los estudiantes de estadística en gran parte están cursando los primeros semestres y apenas están entrando en el mundo de la programación
 
 
 ## Analisís multivariado, edad, semestre, conspiración de alienígenas
 .....
-Nos preguntamos en  los estudiantes que creen que los alienígenas ayudaron civilizaciones antiguas la edad cómo influye. Si al ser mayor se cree menos en conspiraciones o por el contrario tiene más mitos impregnados en sí, también es interesante analizar si el nivel de avance en la carrera influye en esta respuesta 
+##### Nos preguntamos en  los estudiantes que creen que los alienígenas ayudaron civilizaciones antiguas la edad cómo influye. Si al ser mayor se cree menos en conspiraciones o por el contrario tiene más mitos impregnados en sí, también es interesante analizar si el nivel de avance en la carrera influye en esta respuesta 
 
 
 ### Gráfica de puntos, el color rojo indica que el estudiante cree que los alienígenas ayudaron a civilizaciones antiguas, el color azul que no
@@ -663,14 +662,12 @@ Nos preguntamos en  los estudiantes que creen que los alienígenas ayudaron civi
  plot(enc$edad, enc$Q04_Semestre, notch=TRUE,
      "p",
      xlab="Edad",ylab="Semestre ",
-     
      pch= 19,
-     col= ifelse(enc$Q22_alienigenas == "Si", "red", "blue"),
-     
- )
+     col= ifelse(enc$Q22_alienigenas == "Si", "red", "blue"), )
 
 ```
-La grafica nos demuestra ue mientras más se avanza en las carreras; menor creencia en teorias conspiratorias se tiene. Y ue ademas estas teorias son mas creibles en personas más jovenes.
+#### La grafica nos demuestra que mientras más se avanza en las carreras; menor creencia en teorias conspiratorias se tiene. Y ue ademas estas teorias son mas creibles en personas más jovenes.
+
 ```{r}
 enc_alien <- enc %>% 
   filter(enc$Q22_alienigenas =="Si")
@@ -686,7 +683,7 @@ enc_alien_no <- enc %>%
 ### Análisis numérico de los estudiantes que creen en que los alienigenas ayudaron a civilizaciones según el semestre
 
 ```{r}
-summary( enc_alien$Q04_Semestre )
+summary(enc_alien$Q04_Semestre )
 ```
 ### Análisis numérico de los estudiantes que no creen en que los alienigenas ayudaron a civilizaciones según el semestre
 ```{r}
@@ -702,13 +699,13 @@ summary( enc_alien$edad )
 ```{r}
 summary(enc_alien_no$edad)
 ```
-Podemos ver que la edad al parecer no es un factor decisivo ya que las medias de quienes creen y quienes no es exactamente la misma, pero tal vez el semestre que cursa sí indica algo, ya que la media de quienes creen más baja que los que no 
+#### Podemos ver que la edad al parecer no es un factor decisivo ya que las medias de quienes creen y quienes no es exactamente la misma, pero tal vez el semestre que cursa sí indica algo, ya que la media de quienes creen más baja que los que no 
 
 
 
 ## Analisís multivariado, edad, semestre , PAPA
 
-Queremos saber si a los mayores les va mejor que a los jovenes dependiendo  también del nivel de avance en la carrera 
+#### Queremos saber si a los mayores les va mejor que a los jovenes dependiendo  también del nivel de avance en la carrera 
 
 ```{r}
 summary(enc$Q08_PAPA)
@@ -729,7 +726,7 @@ summary(enc$Q08_PAPA)
 
 
 ```
-En la grafica p odemos concluir que aquellos estudiantes que presentan mejor promedio académico son los de semestres entre el 4to y 6to, y además estos estudiantes tienen edades entre los 22 a 25 años.
+#### En la grafica podemos concluir que aquellos estudiantes que presentan mejor promedio académico son los de semestres entre el 4to y 6to, y además estos estudiantes tienen edades entre los 22 a 25 años.
 
 ### hacer el análisis numérico  tendremos en cuenta la media, para dividir los que están abajo de la media como menos buenos que los que están arriba
 ```{r}
@@ -764,13 +761,13 @@ summary( enc_papa_bueno$edad )
 summary(enc_papa_no_bueno$edad)
 ```
 
-Poner conclusiones de este análiss!!!!!!! porfa
+
 
 
 
 ## Analisís multivariado, edad, estrato , PAPA
 
-Ahora nos interesa saber si teniendo en cuenta la edad, el estrato influye en el papa de las personas 
+#### Ahora nos interesa saber si teniendo en cuenta la edad, el estrato influye en el papa de las personas 
 
 
 ### Gráfica de puntos, los  colores nos indican en cuál cuartil están, rojo para papa < 3.8, dorado para   3.8 < papa < 4.042, verde para 4.042 < papa < 4.3, azul para papa > 4.3
@@ -831,7 +828,7 @@ par(oma=c(0,8,0,0))
      )
 
 ```
-En la población notamos que las personas con edades inferiores a 25 años cuyos percentiles obtenidos son mayores o iguales a 80 tienden a creer en el espionaje por ser la población que más navega en internet, (dentados con puntos)
+#### En la población notamos que las personas con edades inferiores a 25 años cuyos percentiles obtenidos son mayores o iguales a 80 tienden a creer en el espionaje por ser la población que más navega en internet, (dentados con puntos)
 
 ### Análisis numérico 
 
@@ -842,12 +839,6 @@ enc_papa_bueno <- enc %>%
 
 enc_papa_no_bueno <- enc %>%
   filter(enc$Q08_PAPA <=  4.042)
-
-
-
-
-
-
 
 enc_espionaje <- enc %>%
   filter(enc$Q16_EspionajeInternet == "Si")
@@ -871,7 +862,7 @@ summary( enc_espionaje$Q06_PercentilSaber11)
 ```{r}
 summary( enc_no_espionaje$Q06_PercentilSaber11)
 ```
-Podemos ver que el PAPA de las personas que estuvieron en un buen percentil en las pruebas del saber es un poco mejor, y en cuanto al espionaje los que no creen estuvieron un poquito peor.
+#### Podemos ver que el PAPA de las personas que estuvieron en un buen percentil en las pruebas del saber es un poco mejor, y en cuanto al espionaje los que no creen estuvieron un poquito peor.
 
 ```{r}
 summary( enc_papa_bueno$edad)
@@ -883,13 +874,13 @@ summary( enc_papa_bueno$edad)
 summary( enc_no_espionaje$edad)
 ```
 
-En cuanto a la edad se puede ver que hay más tendencia a los jovenes para creer que hubo espionaje
+#### En cuanto a la edad se puede ver que hay más tendencia a los jovenes para creer que hubo espionaje
 
 
 
 ## Analisís multivariado, edad, percentilPruebasSaber,  Aterrizaje en la luna
 
-Analizaremos qué tanto tiene que ver la edad y el porcentaje de las pruebas del saber en la creencia que el hombre llegó a la luna, rojo indica que cree que es un montaje, azul cree lo contrario 
+#### Analizaremos qué tanto tiene que ver la edad y el porcentaje de las pruebas del saber en la creencia que el hombre llegó a la luna, rojo indica que cree que es un montaje, azul cree lo contrario 
   
 ```{r,fig.width=7.5, fig.height=6}
 par(oma=c(0,8,0,0))
@@ -927,10 +918,10 @@ summary(enc_luna$Q06_PercentilSaber11)
 ```{r}
 summary(enc_no_luna$Q06_PercentilSaber11)
 ```
-Podemos ver  que el promedio  del saber de las personas que no creen en la coonspiración es considerablemente mayor, mientras que los que creen en la conspiración son un poco más escépticos 
+#### Podemos ver  que el promedio  del saber de las personas que no creen en la coonspiración es considerablemente mayor, mientras que los que creen en la conspiración son un poco más escépticos 
 
 ## RECOMENDACIONES
-1. Para la tabla de datos debería omitirse de ella la primera variable que asigna un número aleoatorio a cada fila puesto que no representa importancia significativa dentro de ésta.
+##### Para la tabla de datos debería omitirse de ella la primera variable que asigna un número aleoatorio a cada fila puesto que no representa importancia significativa dentro de ésta.
 
 ## CONCLUSIONES
-Podemos ver que la universidad como es de carácter público la mayoría de sus estudiantes son de estrato 1, 2, y 3   medianamente, por lo cual es escaso encontrar estudiantes con estratos elevados .
+##### Podemos ver que la universidad como es de carácter público la mayoría de sus estudiantes son de estrato 1, 2, y 3   medianamente, por lo cual es escaso encontrar estudiantes con estratos elevados.
