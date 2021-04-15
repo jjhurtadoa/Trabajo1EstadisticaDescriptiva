@@ -92,7 +92,7 @@ summary(enc)
 ```{r}
 glimpse(enc)
 ```
-#ANÁLISIS UNIVARIADO
+# ANÁLISIS UNIVARIADO
 
 ##### Análisis de la variable género
 ```{r depuración de la variable ** Género**}
@@ -114,7 +114,7 @@ grid(NA, 10)
 par(paramAnt)
 ```
 
-##Análisis de la variable Fecha de nacimiento
+## Análisis de la variable Fecha de nacimiento
 ```{r}
 enc <- enc %>% 
   mutate(Q02_FechaNac = as.Date(as.character(Q02_FechaNac), "%Y-%m-%d"))
@@ -145,7 +145,7 @@ enc[,"edad"]
 ```{r}
 summary(enc$edad)
 ```
-##Análisis de la variable Carrera
+## Análisis de la variable Carrera
 #### Una tabla sencilla que muestra la distribución general de resultados de la variable Carrera de la base de datos; dado que existe un nombre único para cada carrera, no se considera que deba ser depurada, se procederá a ver en grafico la cantidad de estudiantes por carrrera.
 ```{r}
 Q03<-table(enc$Q03_Carrera)
@@ -165,7 +165,7 @@ Frecuencia<- c(2, 54, 1, 26, 1, 2, 1)
 barplot(Frecuencia, names.arg = Q03, density = 20, las= 2, main= 'Cantidad de estudiantes\n encuestados por carrera', ylim=c(0,60), col= 'cyan')
 abline(h=seq(0,60,1), col= rep('grey', 6), lty=3)
 ```
-##Análisis de la variable Semestre
+## Análisis de la variable Semestre
 ```{r}
 summary(enc$Q04_Semestre)
 ```
@@ -174,7 +174,7 @@ Q04 <- table(enc$Q04_Semestre)
 Q04
 ```
 
-##Análisis de la variable Resultados Pruebas Saber 11
+## Análisis de la variable Resultados Pruebas Saber 11
 
 ```{r}
 summary(enc$Q05_Saber11)
@@ -196,12 +196,12 @@ enc$Q05_Saber11[enc$Q05_Saber11 == 580 & !is.na(enc$Q06_PercentilSaber11)] <- 58
 boxplot(enc$Q05_Saber11, main = "Distribución Puntaje Saber 11", notch= TRUE,
         outline = FALSE)
 ```
-##Análisis de la variable Percentil Pruebas Saber 11
+## Análisis de la variable Percentil Pruebas Saber 11
 
 ```{r}
 summary(enc$Q06_PercentilSaber11)
 ```
-```{r depuracion de la variable Q08_PAPA y analisis descriptivo}
+```{r }
 enc %>%
   filter(enc$Q06_PercentilSaber11 > 100)
 ```
@@ -221,7 +221,7 @@ summary(enc$Q06_PercentilSaber11)
 boxplot(enc$Q06_PercentilSaber11, main = "Distribución Percentil Pruebas Saber 11", notch= TRUE,
         outline = FALSE)
 ```
-##Análisis de la variable Fecha Pruebas Saber 11
+## Análisis de la variable Fecha Pruebas Saber 11
 
 ```{r}
 enc <- enc %>% 
@@ -231,9 +231,9 @@ enc <- enc %>%
 ```{r}
 summary(enc$Q07_FechaSaber11)
 ```
-##Análisis de la variable Fecha Pruebas Saber 11
+## Análisis de la variable Fecha Pruebas Saber 11
 ###  Se toma la decisión de omitir los datos en NA ya que no hacen una gran representacion y se filtra la fila en donde la variable *Q08_PAPA* presenta un error atípico y para tomar la decisión de corregir el dato, pues consideramos que pudo deberse a un error en la digitación de éste
-```{r depuracion de la variable Q08_PAPA y analisis descriptivo}
+```{r }
 enc %>%
   filter(Q08_PAPA > 5)
 ```
@@ -260,101 +260,174 @@ points(mean(enc$Q08_PAPA, na.rm=FALSE),1, col=' green', pch=19, cex=2)
 legend(4.2,1.5, legend=c('Promedio'), pch=19, col= 'red')
 ```
 
-##Análisis de la variable Reside en el Área Metropolitana
+## Análisis de la variable Reside en el Área Metropolitana
 ```{r}
 summary(enc$Q09_EnAreaMetropolitana)
 ```
+```{r}
+plot(x = enc$Q09_EnAreaMetropolitana)
+```
 
-##Análisis de la variable Estrato
+
+## Análisis de la variable Estrato
 ```{r}
 summary(enc$Q10_Estrato)
 ```
+```{r}
+plot(x = enc$Q10_Estrato)
+```
 
-##Análisis de la variable Tiene o no Tiene R
+## Análisis de la variable Tiene o no Tiene R
 ```{r}
 summary(enc$Q11_R)
 ```
+```{r}
+plot(x = enc$Q11_R)
+```
 
 
-##Análisis de la variable Tiene o no Tiene R Studio
+## Análisis de la variable Tiene o no Tiene R Studio
 ```{r}
 summary(enc$Q12_RStudio)
 ```
+```{r}
+plot(x = enc$Q12_RStudio)
+```
 ### Se omite la Pregunta 13 ya que esta son justificaciones del encuestado.
 
-##Análisis de la variable Recursos Informaticos
+## Análisis de la variable Recursos Informaticos
 ```{r}
 summary(enc$Q14_RecursosInformaticos..Internet.de.cable.propio)
+```
+```{r}
+plot(x = enc$Q14_RecursosInformaticos..Internet.de.cable.propio)
+```
+
+```{r}
+summary(enc$Q14_RecursosInformaticos..Internet.de.cable.no.propio)
+```
+
+```{r}
+summary(enc$Q14_RecursosInformaticos..Wifi.propio)
+```
+
+```{r}
+summary(enc$Q14_RecursosInformaticos..Celular.sin.datos)
+```
+```{r}
+summary(enc$Q14_RecursosInformaticos..Computador.de.escritorio.propio.y.exclusivo)
+```
+
+```{r}
+summary(enc$Q14_RecursosInformaticos..Computador.de.escritorio.no.propio.pero.exclusivo)
+```
+```{r}
+summary(enc$Q14_RecursosInformaticos..Computador.propio..pero.no.exclusivo)
+```
+
+```{r}
+summary(enc$Q14_RecursosInformaticos..Portátil.propio)
+```
+
+```{r}
+summary(enc$Q14_RecursosInformaticos..Wifi.propio)
 ```
 
 
 
-
-
-Falta
-
-
-
-##Análisis de la variable Alunizaje ¿Cree que el hombre en realidad llegó a la Luna?
+## Análisis de la variable Alunizaje ¿Cree que el hombre en realidad llegó a la Luna?
 ```{r}
 summary(enc$Q15_Alunizaje)
 ```
 
-##Análisis de la variable Espionaje por Internet ¿Cree en el Espionaje a traves del Internet?
+```{r}
+plot(x = enc$Q15_Alunizaje)
+```
+
+## Análisis de la variable Espionaje por Internet ¿Cree en el Espionaje a traves del Internet?
 ```{r}
 summary(enc$Q16_EspionajeInternet)
 ```
+```{r}
+plot(x = enc$Q16_EspionajeInternet)
+```
 
 
-##Análisis de la variable Experimentos ¿Se realizaron experimento en personas afroamericanas en donde no se suministró la penicilina a enfermos con sífilis?
+## Análisis de la variable Experimentos ¿Se realizaron experimento en personas afroamericanas en donde no se suministró la penicilina a enfermos con sífilis?
 ```{r}
 summary(enc$Q17_Experimentos)
 ```
+```{r}
+plot(x = enc$Q17_Experimentos)
+```
 
 
-##Análisis de la variable Vacunas ¿Las vacunas no sirven y son una conspiración de las multinacionales farmacéuticas para enriquecers?
+## Análisis de la variable Vacunas ¿Las vacunas no sirven y son una conspiración de las multinacionales farmacéuticas para enriquecers?
 ```{r}
 summary(enc$Q18_Vacunas)
 ```
+```{r}
+plot(x = enc$Q18_Vacunas)
+```
 
 
-##Análisis de la variable Evidencia Falsa ¿Se utilizó evidencia falsa por el FBI para condenar personas inocentes durante el siglo pasado en EEUU?
+## Análisis de la variable Evidencia Falsa ¿Se utilizó evidencia falsa por el FBI para condenar personas inocentes durante el siglo pasado en EEUU?
 ```{r}
 summary(enc$Q19_EvidenciaFalsa)
+```
+```{r}
+plot(x = enc$Q19_EvidenciaFalsa)
 ```
 
 
 
-##Análisis de la variable Rafaga Solares ¿Las ráfagas solares causan los sismos en la tierra?
+
+## Análisis de la variable Rafaga Solares ¿Las ráfagas solares causan los sismos en la tierra?
 
 ```{r}
 summary(enc$Q20_RafagasSolares)
 ```
+```{r}
+plot(x = enc$Q20_RafagasSolares)
+```
 
 
-##Análisis de la variable Tierra Hueca ¿La tierra es hueca y en su interior existe una civilización oculta?
+## Análisis de la variable Tierra Hueca ¿La tierra es hueca y en su interior existe una civilización oculta?
 
 ```{r}
 summary(enc$Q21_TierraHueca)
 ```
+```{r}
+plot(x = enc$Q21_TierraHueca)
+```
 
 
-##Análisis de la variable Alienigenas ¿Los alienígenas visitaron las civilizaciones antiguas, influyeron en sus historia y construyeron los mega monumentos de la antigüedad?
+## Análisis de la variable Alienigenas ¿Los alienígenas visitaron las civilizaciones antiguas, influyeron en sus historia y construyeron los mega monumentos de la antigüedad?
 
 
 ```{r}
 ali<-table(enc$Q22_alienigenas)
 ali
 ```
+```{r}
+plot(x = enc$Q22_alienigenas)
+```
 
 
-##Análisis de la variable Cambio Climatico ¿Los efectos del cambio climático son naturales, y el escándalo se debe a conspiraciones de ambientalistas y de ciertos gremios económicos?
+## Análisis de la variable Cambio Climatico ¿Los efectos del cambio climático son naturales, y el escándalo se debe a conspiraciones de ambientalistas y de ciertos gremios económicos?
 
 ```{r}
 summary(enc$Q23_CambioClimatico)
 ```
+```{r}
+```
 
-##Análisis de la variable área
+
+```{r}
+plot(x = enc$Q23_CambioClimatico)
+```
+
+## Análisis de la variable área
 
 
 ```{r}
@@ -374,7 +447,7 @@ pie(Area, label = are, main = "Porcentaje de\n estudiantes en sus respectivos ca
 ```
 
 
-##Análisis de la variable Porcentaje que respondieron bien la respuesta anterior
+## Análisis de la variable Porcentaje que respondieron bien la respuesta anterior
 
 ```{r}
 summary(enc$Q25_PorcentArea)
@@ -383,7 +456,7 @@ summary(enc$Q25_PorcentArea)
 
 
 
-##Análisis de la variable Porcentaje que respondieron bien de los Divisores
+## Análisis de la variable Porcentaje que respondieron bien de los Divisores
 
 ```{r}
 summary(enc$Q27_PorcentDivisor)
@@ -395,7 +468,7 @@ summary(enc$Q27_PorcentDivisor)
 
 
 
-#ANÁLISIS BIVARIADO
+# ANÁLISIS BIVARIADO
 
 ## Cruce variable PAPA con Carreras
 #### Se hace una visualización del comportamiento del PAPA con respecto a las carreras registradas en la base de datos, para verificar si tal como pensamos; *¿será los estudiantes de Estadistica por ser semi-primíparos en la universidad tienen un mejor (mayor) PAPA?*
@@ -446,7 +519,7 @@ axis(1,1:7, labels= c("Matemáticas", "Ingeniería de sistemas", "Estadística",
 Al traslaparse esta información en particular con el grupo de estudiantes de ingeniería de sistemas; no podemos decir con certeza que *sí* pues aúnque el estudiante más joven es de Estadística; existen intervalos de confianza en el mismo  rango de las edades para estos dos grupos, lo que quiere decir que entre éstos dos, estan los estudiantes más jovenes de la encuesta.
 
 
-#ANÁLISIS MULTIVARIADO
+# ANÁLISIS MULTIVARIADO
 
 
 Se espera que en la pregunta relacionada con la gráfica, las carreras relacionadas con matemáticas obtengan un mejor puntaje. A la vez queremos analizar si el nivel del semestre influye en contestar correctamente. 
@@ -454,9 +527,9 @@ Se espera que en la pregunta relacionada con la gráfica, las carreras relaciona
 
 
 
-##Analisís multivariado, Semestre, carrera, respuesta correcta a la pregunta del área
+## Analisís multivariado, Semestre, carrera, respuesta correcta a la pregunta del área
 
-###Gráfica de puntos, el color rojo indica que el estudiante acertó la pregunta, el color azul que falló
+### Gráfica de puntos, el color rojo indica que el estudiante acertó la pregunta, el color azul que falló
 ```{r,fig.width=7.5, fig.height=6}
  par(oma=c(0,8,0,0))
  plot(enc$Q04_Semestre, enc$Q03_Carrera, notch=TRUE,
@@ -482,23 +555,23 @@ enc_area_desacertada <- enc %>%
 
 ```
 
-###Análisis numérico de los estudiantes que acertaron la pregunta según la carrera
+### Análisis numérico de los estudiantes que acertaron la pregunta según la carrera
 
 ```{r}
 summary( enc_area_acertada$Q03_Carrera )
 ```
-###Análisis numérico de los estudiantes que fallaron la encuesta según la carrera
+### Análisis numérico de los estudiantes que fallaron la encuesta según la carrera
 
 ```{r}
 summary( enc_area_desacertada$Q03_Carrera )
 ```
 
-###Análisis numérico de los estudiantes que acertaron la pregunta según el semestre
+### Análisis numérico de los estudiantes que acertaron la pregunta según el semestre
 ```{r}
 summary( enc_area_acertada$Q04_Semestre )
 ```
 
-###Análisis numérico de los estudiantes que fallaron la pregunta según el semestre
+### Análisis numérico de los estudiantes que fallaron la pregunta según el semestre
 ```{r}
 summary( enc_area_desacertada$Q04_Semestre )
 ```
@@ -543,12 +616,12 @@ enc_RStudio_no <- enc %>%
 
 ```
 
-###Análisis numérico de los estudiantes que tenían Rstudio instalado pregunta según la carrera
+### Análisis numérico de los estudiantes que tenían Rstudio instalado pregunta según la carrera
 
 ```{r}
 summary( enc_RStudio$Q03_Carrera )
 ```
-###Análisis numérico de los estudiantes que no  tenían Rstudio instalado  según la carrera
+### Análisis numérico de los estudiantes que no  tenían Rstudio instalado  según la carrera
 
 ```{r}
 summary( enc_RStudio_no$Q03_Carrera )
@@ -558,13 +631,13 @@ summary( enc_RStudio_no$Q03_Carrera )
 ```
 
 
-###Análisis numérico de los estudiantes que tenían Rstudio instalado según el semestre
+### Análisis numérico de los estudiantes que tenían Rstudio instalado según el semestre
 ```{r}
 summary( enc_RStudio$Q04_Semestre )
 ```
 
 
-###Análisis numérico de los estudiantes que  no tenían Rstudio instalado según el semestre
+### Análisis numérico de los estudiantes que  no tenían Rstudio instalado según el semestre
 
 ```{r}
 ( enc_RStudio_no$Q04_Semestre )
@@ -577,12 +650,12 @@ summary( enc_RStudio_no$Q04_Semestre )
 Los estudiantes que no tenían instalado Rstudio marcan  tendencia de ser de semestres tempraneros, y vemos que siendo 11, 10 de estos son de estadística, lo que nos indica que los estudiantes de estadística en gran parte están cursando los primeros semestres y apenas están entrando en el mundo de la programación
 
 
-##Analisís multivariado, edad, semestre, conspiración de alienígenas
+## Analisís multivariado, edad, semestre, conspiración de alienígenas
 .....
 Nos preguntamos en  los estudiantes que creen que los alienígenas ayudaron civilizaciones antiguas la edad cómo influye. Si al ser mayor se cree menos en conspiraciones o por el contrario tiene más mitos impregnados en sí, también es interesante analizar si el nivel de avance en la carrera influye en esta respuesta 
 
 
-###Gráfica de puntos, el color rojo indica que el estudiante cree que los alienígenas ayudaron a civilizaciones antiguas, el color azul que no
+### Gráfica de puntos, el color rojo indica que el estudiante cree que los alienígenas ayudaron a civilizaciones antiguas, el color azul que no
 
 
 ```{r,fig.width=7.5, fig.height=6}
@@ -599,32 +672,33 @@ Nos preguntamos en  los estudiantes que creen que los alienígenas ayudaron civi
 ```
 La grafica nos demuestra ue mientras más se avanza en las carreras; menor creencia en teorias conspiratorias se tiene. Y ue ademas estas teorias son mas creibles en personas más jovenes.
 ```{r}
-enc_alien <- enc %>%
+enc_alien <- enc %>% 
+  filter(enc$Q22_alienigenas =="Si")
 
 enc_alien_no <- enc %>%
   filter(enc$Q22_alienigenas !="Si")
-  filter(enc$Q22_alienigenas =="Si")
+ 
 
 
 
 ```
 
-###Análisis numérico de los estudiantes que creen en que los alienigenas ayudaron a civilizaciones según el semestre
+### Análisis numérico de los estudiantes que creen en que los alienigenas ayudaron a civilizaciones según el semestre
 
 ```{r}
 summary( enc_alien$Q04_Semestre )
 ```
-###Análisis numérico de los estudiantes que no creen en que los alienigenas ayudaron a civilizaciones según el semestre
+### Análisis numérico de los estudiantes que no creen en que los alienigenas ayudaron a civilizaciones según el semestre
 ```{r}
 summary(enc_alien_no$Q04_Semestre)
 ```
 
-###Análisis numérico de los estudiantes que creen en que los alienigenas ayudaron a civilizaciones según la edad
+### Análisis numérico de los estudiantes que creen en que los alienigenas ayudaron a civilizaciones según la edad
 
 ```{r}
 summary( enc_alien$edad )
 ```
-###Análisis numérico de los estudiantes que no creen en que los alienigenas ayudaron a civilizaciones según la edad
+### Análisis numérico de los estudiantes que no creen en que los alienigenas ayudaron a civilizaciones según la edad
 ```{r}
 summary(enc_alien_no$edad)
 ```
@@ -632,7 +706,7 @@ Podemos ver que la edad al parecer no es un factor decisivo ya que las medias de
 
 
 
-##Analisís multivariado, edad, semestre , PAPA
+## Analisís multivariado, edad, semestre , PAPA
 
 Queremos saber si a los mayores les va mejor que a los jovenes dependiendo  también del nivel de avance en la carrera 
 
@@ -643,12 +717,12 @@ summary(enc$Q08_PAPA)
 ### Gráfica de puntos, los  colores nos indican en cuál cuartil están, rojo para papa < 3.8, dorado para   3.8 < papa < 4.042, verde para 4.042 < papa < 4.3, azul para papa > 4.3
 ```{r,fig.width=7.5, fig.height=6}
  par(oma=c(0,8,0,0))
- plot(enc$Q24_area, enc$Q06_PercentilSaber11, notch=TRUE,
+ plot(enc$edad, enc$Q04_Semestre, notch=TRUE,
      "p",
-     xlab="PERCENTIL DEL ICFES",ylab="AREA",
+     xlab="Edad",ylab=" ",
      
      pch= 19,
-     col= ifelse(enc$Q10_Estrato< 3.8, "red", ifelse(enc$Q08_PAPA < 4.042, "darkgoldenrod1", ifelse(enc$Q08_PAPA < 4.3, "forestgreen", "blue"))),
+     col= ifelse(enc$Q08_PAPA < 3.8, "red", ifelse(enc$Q08_PAPA < 4.042, "darkgoldenrod1", ifelse(enc$Q08_PAPA < 4.3, "forestgreen", "blue"))),
      
      )
 
@@ -670,22 +744,22 @@ enc_papa_no_bueno <- enc %>%
 ```
 
 
-###Análisis numérico de los estudiantes con un PAPA "bueno" según el semestre
+### Análisis numérico de los estudiantes con un PAPA "bueno" según el semestre
 
 ```{r}
 summary( enc_papa_bueno$Q04_Semestre )
 ```
-###Análisis numérico de los estudiantes con un PAPA "no bueno" según el semestre
+### Análisis numérico de los estudiantes con un PAPA "no bueno" según el semestre
 ```{r}
 summary(enc_papa_no_bueno$Q04_Semestre)
 ```
 
-###Análisis numérico de los estudiantes con un PAPA "bueno" según la edad
+### Análisis numérico de los estudiantes con un PAPA "bueno" según la edad
 
 ```{r}
 summary( enc_papa_bueno$edad )
 ```
-###Análisis numérico de los estudiantes con un PAPA "no bueno" según la edad
+### Análisis numérico de los estudiantes con un PAPA "no bueno" según la edad
 ```{r}
 summary(enc_papa_no_bueno$edad)
 ```
@@ -694,7 +768,7 @@ Poner conclusiones de este análiss!!!!!!! porfa
 
 
 
-##Analisís multivariado, edad, estrato , PAPA
+## Analisís multivariado, edad, estrato , PAPA
 
 Ahora nos interesa saber si teniendo en cuenta la edad, el estrato influye en el papa de las personas 
 
@@ -716,37 +790,17 @@ Ahora nos interesa saber si teniendo en cuenta la edad, el estrato influye en el
 ```
 ###### Con respecto al estrato y edad notamos que mientras más jovenes y de estratos bajos; el PAPA se puede considerar medianamente alto, entre *4 y 4.3* 
 
-###Análisis numérico de los estudiantes con un PAPA "bueno" según el estrato
-
-```{r}
-summary(enc$Q06_PercentilSaber11)
-```
-CORREGIR!!!!!!!!
-```{r,fig.width=7.5, fig.height=6}
- par(oma=c(0,8,0,0))
- plot(enc$Q24_area, enc$Q10_Estrato, notch=TRUE,
-     
-     xlab="", ylab="Estrato ",
-     
-     pch= 19,
-     col= ifelse(enc$Q06_PercentilSaber11 < 40, "red", ifelse(enc$Q06_PercentilSaber11< 70, "darkgoldenrod1", ifelse(enc$Q06_PercentilSaber11 < 100, "forestgreen", "blue"))),
-     
-     )
-
-
-
-```
-
+### Análisis numérico de los estudiantes con un PAPA "bueno" según el estrato
 
 ```{r}
 summary( enc_papa_bueno$Q10_Estrato )
 ```
-###Análisis numérico de los estudiantes con un PAPA "no bueno" según el estrato
+### Análisis numérico de los estudiantes con un PAPA "no bueno" según el estrato
 ```{r}
 summary(enc_papa_no_bueno$Q10_Estrato)
 ```
 
-###Análisis numérico de los estudiantes con un PAPA "bueno" según la edad
+### Análisis numérico de los estudiantes con un PAPA "bueno" según la edad
 
 ```{r}
 summary( enc_papa_bueno$edad )
@@ -755,6 +809,15 @@ summary( enc_papa_bueno$edad )
 ```{r}
 summary(enc_papa_no_bueno$edad)
 ```
+
+```{r}
+summary(enc$Q06_PercentilSaber11)
+```
+
+
+
+
+## Analisís multivariado, edad, percentilPruebasSaber , PAPA, Espionaje
   
 ```{r,fig.width=7.5, fig.height=6}
 par(oma=c(0,8,0,0))
@@ -770,7 +833,101 @@ par(oma=c(0,8,0,0))
 ```
 En la población notamos que las personas con edades inferiores a 25 años cuyos percentiles obtenidos son mayores o iguales a 80 tienden a creer en el espionaje por ser la población que más navega en internet, (dentados con puntos)
 
+### Análisis numérico 
 
+```{r}
+
+enc_papa_bueno <- enc %>%
+  filter(enc$Q08_PAPA > 4.042)
+
+enc_papa_no_bueno <- enc %>%
+  filter(enc$Q08_PAPA <=  4.042)
+
+
+
+
+
+
+
+enc_espionaje <- enc %>%
+  filter(enc$Q16_EspionajeInternet == "Si")
+
+enc_no_espionaje <- enc %>%
+  filter(enc$Q16_EspionajeInternet == "No")
+```
+
+```{r}
+summary( enc_papa_bueno$Q06_PercentilSaber11)
+```
+
+```{r}
+summary( enc_papa_no_bueno$Q06_PercentilSaber11)
+```
+
+```{r}
+summary( enc_espionaje$Q06_PercentilSaber11)
+```
+
+```{r}
+summary( enc_no_espionaje$Q06_PercentilSaber11)
+```
+Podemos ver que el PAPA de las personas que estuvieron en un buen percentil en las pruebas del saber es un poco mejor, y en cuanto al espionaje los que no creen estuvieron un poquito peor.
+
+```{r}
+summary( enc_papa_bueno$edad)
+```
+
+
+
+```{r}
+summary( enc_no_espionaje$edad)
+```
+
+En cuanto a la edad se puede ver que hay más tendencia a los jovenes para creer que hubo espionaje
+
+
+
+## Analisís multivariado, edad, percentilPruebasSaber,  Aterrizaje en la luna
+
+Analizaremos qué tanto tiene que ver la edad y el porcentaje de las pruebas del saber en la creencia que el hombre llegó a la luna, rojo indica que cree que es un montaje, azul cree lo contrario 
+  
+```{r,fig.width=7.5, fig.height=6}
+par(oma=c(0,8,0,0))
+ plot(enc$edad, enc$Q06_PercentilSaber11, notch=TRUE,
+     "p",
+     xlab="Edad",ylab="Percentil pruebas del saber ",
+     
+     pch= ifelse(enc$Q15_Alunizaje == "Si", 20, 0),
+     col= ifelse(enc$Q15_Alunizaje == "Si", "red", "blue")
+     
+     )
+
+```
+### Analisis numérico 
+
+```{r}
+enc_luna <- enc %>%
+  filter(enc$Q15_Alunizaje == "Si")
+
+enc_no_luna <- enc %>%
+  filter(enc$Q15_Alunizaje == "No")
+```
+
+```{r}
+summary(enc_luna$edad)
+```
+
+```{r}
+summary(enc_no_luna$edad)
+```
+```{r}
+summary(enc_luna$Q06_PercentilSaber11)
+```
+
+```{r}
+summary(enc_no_luna$Q06_PercentilSaber11)
+```
+Podemos ver  que el promedio  del saber de las personas que no creen en la coonspiración es considerablemente mayor, mientras que los que creen en la conspiración son un poco más escépticos 
 
 ## RECOMENDACIONES
 1. Para la tabla de datos debería omitirse de ella la primera variable que asigna un número aleoatorio a cada fila puesto que no representa importancia significativa dentro de ésta.
